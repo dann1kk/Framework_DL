@@ -1,0 +1,12 @@
+1668527027895	geckodriver	INFO	Listening on 127.0.0.1:53908
+1668527030977	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "53909" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\DANIEL~1.POG\\AppData\\Local\\Temp\\rust_mozprofileDhv5Js"
+1668527031385	Marionette	INFO	Marionette enabled
+1668527031389	Marionette	INFO	Listening on port 53920
+WebDriver BiDi listening on ws://127.0.0.1:53909
+Read port: 53920
+1668527031495	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\DANIEL~1.POG\\AppData\\Local\\Temp\\rust_mozprofileDhv5Js\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:53909/devtools/browser/cb0090a5-cc37-45d3-bef0-5f0fa78f44aa
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://app-toolkit-frontend-qa.azurewebsites.net."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://app-toolkit-frontend-qa.azurewebsites.net."
+1668527038153	Marionette	INFO	Stopped listening on port 53920
