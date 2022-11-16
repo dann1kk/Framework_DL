@@ -88,7 +88,7 @@ Test Case - Verify if user can create retrospective from template
     When I press the Use Template button
     And I type <title> in the retro template name field
     And I choose date and time
-    And click the Create button
+    And I click the [Create] button
     Then retrospective meeting is created
 
 Test Case - User is logged out after pressing log out button
@@ -97,9 +97,29 @@ Test Case - User is logged out after pressing log out button
     Then I am logged out and redirected to the main login page
 
 Test Case - Reveal button Functionality
-    [Setup]  #give link to a meeting with first template TEAM_HEALTH_CHECK
-    Given I am on TEAM_HEALTH_CHECK  https://app-toolkit-frontend-qa.azurewebsites.net/project/1/retro/931
+    [Setup]  #give link to a started meeting with first template TEAM_HEALTH_CHECK (and votes (optional))
+    Given I am on TEAM_HEALTH_CHECK  https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/retro/984
     And I am logged in as Manager
     When manager clicks reveal results button 
     Then the Reveal results button is replaced by hide results
 
+Test Case - Hide button Functionality 
+    [Setup]  #give link to a started meeting with first template TEAM_HEALTH_CHECK (and votes (optional))
+    Given I am on TEAM_HEALTH_CHECK    https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/retro/984
+    And I am logged in as Manager 
+    And manager clicks reveal results button
+    When manager clicks hide results button
+    Then hide results button is replaced with reveal results button
+    # give invite link for guests
+    And guest users don't see the voting results  https://app-toolkit-frontend-qa.azurewebsites.net/retro/invite?token=eyJhbGciOiJIUzI1NiJ9.eyJndWVzdF9pbmZvIjoicmV0cm86MTY0ODo5ODQiLCJpYXQiOjE2Njg2Mjk5MzJ9.0dxF3UU7NVmm-Z43GbBPuv79NOJ5MghfBdm-OAw-v8w
+
+Test Case - Check the meeting to be active 
+    Given I am logged in as Manager 
+    And I am on Daily Stand-Up page 
+    And I press Create a Daily meeting button
+    And I type Daily meeting title 
+    And I choose date and time 
+    When I click the [Create] button 
+    And I get redirected to the main page
+    Then the created meeting is present 
+    And [Join] button is enabled

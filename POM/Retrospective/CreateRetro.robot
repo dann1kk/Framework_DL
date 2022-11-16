@@ -40,7 +40,7 @@ the user selects a later time than the current time
 the user clicks Ok button to save the time
     click element  //span[contains(text(), 'OK')]
 
-click the Create button
+I click the [Create] button
     click element  //button[@type='submit']
 
 the Retro meeting is saved in the active tab
