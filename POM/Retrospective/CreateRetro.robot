@@ -2,6 +2,9 @@
 Library  SeleniumLibrary
 Library  String
 
+*** Variables ***
+${TITLE}
+
 *** Keywords ***
 I drag and drop all templates
     wait until page contains element  //div[contains(text(), 'ICE_BREAKING')]
@@ -17,8 +20,9 @@ the Retro meeting form is displayed
     wait until element is visible  //h1[contains(text(), 'Create new Retro meeting')]
 
 I type <title> in the retro template name field
-    Wait Until Element Is Visible  //input[@placeholder="Retro template name"]
-    input text  //input[@placeholder="Retro template name"]  Test Meeting
+    Wait Until Element Is Visible  //input[@placeholder="Retro meeting name"]
+    ${TITLE}=  Generate Random String  10  [LETTERS]
+    input text  //input[@placeholder="Retro meeting name"]  ${TITLE}
 
 the user ticks on the notes checkbox
     click element  //input[@id="notes"]
@@ -44,7 +48,7 @@ I click the [Create] button
     click element  //button[@type='submit']
 
 the Retro meeting is saved in the active tab
-    wait until element is visible  //div[contains(text(), 'Test Meeting Selenium')]
+    wait until element is visible  //div[contains(text(), '${TITLE}')]
 
 user is redirected to the active retro page
     wait until element is visible  (//div[@aria-selected='true'])
@@ -52,15 +56,12 @@ user is redirected to the active retro page
 the user left the droppable area empty
      wait until element is visible  //h1[contains(text(), 'Create new Retro meeting')]
 the user complete all the rest components with valid data
-    input text  //input[@placeholder="Retro template name"]  Test Meeting Selenium
+    Wait Until Element Is Visible  //input[@placeholder="Retro meeting name"]
+    input text  //input[@placeholder="Retro meeting name"]  ${TITLE}
     click element  //input[@id='date']
     click element  //a[contains(text(), 'Today')]
     click element  //input[@id='time']
-    scroll element into view  //div[contains(text(), '23')]
-    click element  //div[contains(text(), '23')]
-    scroll element into view  //span[contains(text(), 'OK')]
-    click element  //span[contains(text(), 'OK')]
-
+    click element  //a[contains(text(), 'Now')]
 
 an error message near droppable area is displayed
     wait until element is visible  //div[contains(text(), 'Retro template is required')]
@@ -81,4 +82,4 @@ I choose date and time
     click element  //a[contains(text(), 'Now')]
 
 retrospective meeting is created
-    wait until element is visible  //div[contains(text(), 'Test Meeting')]
+    wait until element is visible  //div[contains(text(), '${TITLE}')]
