@@ -10,24 +10,18 @@ ${TITLE}
 
 I drag and drop all templates
     Wait Until Element Is Visible  //h1[contains(text(), 'Create new Retro meeting')]
-    ${js}        Get File              dragdrop.js
-    Execute Javascript    ${js}; return DragNDrop1("two", "bin");
+    Drag And Drop  //div[contains(text(), 'ICE_BREAKING')]  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/p[1]
     Sleep  1s
-    Execute Javascript    ${js}; return DragNDrop2("two", "bin");
+    Drag And Drop  //div[contains(text(), 'AGILE')]   //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/p[1]
+    Sleep  1s 
+    Drag And Drop  //div[contains(text(), 'TEAM_HEALTH_CHECK')]  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/p[1]
     Sleep  1s
-    Execute Javascript    ${js}; return DragNDrop3("two", "bin");
-    Sleep  1s
-    Execute Javascript    ${js}; return DragNDrop4("two", "bin");
-
-I reorder templates 
-    Scroll Element Into View  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/button
-    ${js}        Get File              dragdrop.js
-    Execute Javascript    ${js}; return DragNDrop5("two", "bin");
-    Sleep  1s
-    
+    Drag And Drop  //div[contains(text(), 'EVENT_ENDING')]  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/p[1]
+    Sleep  1s 
 
 templates are present in the droppable area
-    Wait Until Element Is Visible  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/div[4]/div[1]
+   # fourth element in droppable area
+    Wait Until Element Is Visible  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/div/div/div[4]/div/div[1]
      
 the Retro meeting form is displayed
     wait until element is visible  //h1[contains(text(), 'Create new Retro meeting')]
@@ -42,6 +36,7 @@ the user ticks on the notes checkbox
 
 the user sets timer for <time> minutes
     [Arguments]  ${time}
+    Execute Javascript    $(document).scrollTop(100)
     double click element  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[6]/div/div/div/div/div[1]/div[2]/input
     input text  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[6]/div/div/div/div/div[1]/div[2]/input  ${time}
 

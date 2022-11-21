@@ -9,35 +9,33 @@ ${staff_email}   staff@amdaris.com
 ${staff_password}  amdaris
 
 *** Keywords ***
-DL joined the daily stand-up meeting as 'Manager'
-    [Arguments]  ${meeting_link}
+DL joined the daily stand-up meeting as <User>
+    [Arguments]  ${User}  ${meeting_link} 
     open browser  ${meeting_link}  firefox
     maximize browser window
-    I am logged in as Manager
+    IF  "${User}" == "Manager"
+       I am logged in as Manager
+    ELSE IF  "${User}" == "Staff"
+       I am logged in as Staff
+    END
+
 
 the standup meeting has Notes integrated
     wait until page contains element  //h3[contains(text(), 'Notes')]
 
 @user writes a blank message in the Notes
+    Wait Until Element Is Visible  //input[@class="ant-input"]
     input text   //input[@class="ant-input"]    ${SPACE}
 
 @user tries to send the message
     click element  //span[@aria-label='send']
 
-the Send button is disabled - manager
-    wait until page contains element  (//button[@disabled = ""])[3]
+a warning message is displayed
+    wait until page contains element  //div[contains(text(), 'message')]
+
 the message is not sent and displayed in Notes
 
     wait until page does not contain element  //*[@id="messageList"]/ul/li[1]/div
-
-the Send button is disabled - staff
-    wait until page contains element  //button[@disabled = ""]
-
-Team Members joined the daily stand-up meeting as 'Staff'
-     [Arguments]  ${meeting_link}
-     open browser  ${meeting_link}  firefox
-     maximize browser window
-     I am logged in as Manager
 
 
 

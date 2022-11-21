@@ -18,7 +18,7 @@ Test Teardown  End Test
 
 *** Variables ***
 # link to a working daily with notes integrated
-${daily_meeting}  https://app-toolkit-frontend-qa.azurewebsites.net/project/1/daily/99
+${daily_meeting}  https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/daily/448
 # link to a templates page with templates created on it
 ${templates_page}  https://app-toolkit-frontend-qa.azurewebsites.net/project/7/retro?tab=templates
 # link to retro meeting with first template team_health_check
@@ -47,22 +47,13 @@ Test Case - Check if all templates can be dragged and dropped in the droppable a
    And I drag and drop all templates
    Then templates are present in the droppable area
 
-Test Case - Adding Blank Messages in the Daily Stand-Up Notes - Manager
+Test Case - Adding Blank Messages in the Daily Stand-Up Notes
     [Setup] 
-    Given DL joined the daily stand-up meeting as 'Manager'  ${daily_meeting}
+    Given DL joined the daily stand-up meeting as <User>  Manager  ${daily_meeting}
     And the standup meeting has Notes integrated
     When @user writes a blank message in the Notes
     And @user tries to send the message
-    Then the Send button is disabled - manager
-    And the message is not sent and displayed in Notes
-
-Test Case - Adding Blank Messages in the Daily Stand-Up Notes - Staff
-    [Setup]
-    Given Team Members joined the daily stand-up meeting as 'Staff'  ${daily_meeting}
-    And the standup meeting has Notes integrated
-    When @user writes a blank message in the Notes
-    And @user tries to send the message
-    Then the Send button is disabled - staff
+    Then a warning message is displayed
     And the message is not sent and displayed in Notes
 
 Test Case - Verify if manager can create and save a retro meeting
@@ -73,7 +64,6 @@ Test Case - Verify if manager can create and save a retro meeting
     And I type <title> in the retro template name field
     And the user ticks on the notes checkbox
     And I drag and drop all templates
-    And I reorder templates
     And the user sets timer for <time> minutes  00
     And the user selects today`s date
     And the user selects a later time than the current time
