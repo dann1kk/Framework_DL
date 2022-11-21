@@ -24,6 +24,23 @@ the user clicks [Create Retro] button
     wait until element is visible  //span[contains(text(), 'Create Retro')]
     click element  //span[contains(text(), 'Create Retro')]
 
+the user is in Active tab on <Page> 
+    [Arguments]  ${Page} 
+    IF  "${Page}" == "Retro"
+    I access retrospective page
+    ELSE IF  "${Page}" == "Daily"
+    I press on project  21
+    END
+
+the user can see the [Invite] button next to an active event
+    Wait Until Element Is Visible  (//Span[contains(text(), 'Invite')])[2]
+    
+user clicks on [Invite] button
+    Click Element  (//Span[contains(text(), 'Invite')])[2]
+
+the user sees a text notification "Copying to clipboard was successful!"
+    Wait Until Element Is Visible  //div[contains(text(), 'Copying to clipboard was successful!')]
+
 
 
 

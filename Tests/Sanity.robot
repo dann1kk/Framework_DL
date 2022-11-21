@@ -10,6 +10,7 @@ Resource  ../POM/Daily_Meeting/Daily_Meeting.robot
 Resource  ../POM/Daily_Meeting/MainPage.robot
 Resource  ../POM/Log_In/LoggingIn.robot
 Resource  ../POM/ProjectsPage.robot
+Resource  ../POM/Daily_Meeting/Create_Edit_Daily.robot
 
 Documentation  Sanity Tests
 
@@ -133,4 +134,34 @@ Test Case - Test 2 browsers
     Switch to 2 browser
     Click on browser 1
 
-Test Case -  
+Test Case - Generate invite link
+    Given I am logged in as Manager
+    And the user is in Active tab on <Page>  Retro 
+    And the user can see the [Invite] button next to an active event
+    When user clicks on [Invite] button
+    Then the user sees a text notification "Copying to clipboard was successful!"
+
+Test Case - Create One-Time Daily Stand-up meeting
+    Given I am logged in as Manager
+    And I am on Daily Stand-Up page
+    When I press Create Daily-Meeting button 
+    And I type Daily-Meeting title
+    And I select Timer durration hours and minutes  01  15
+    And the user selects today`s date
+    And the user selects a later time than the current time
+    And the user clicks Ok button to save the time
+    And I select Occurrence one-time  Monday
+    And I click the [Create] button
+    Then the created meeting is present
+
+Test Case - Edit Daily Stand-Up meeting
+    Given I am logged in as Manager
+    And a daily stand-up meeting is created 
+    When I click [Edit] button
+    And I edit the event name  
+    And I untick the Notes and Timer checkboxes
+    And I edit the Year, Month and Date  2024  Jul  1
+    And the user selects a later time than the current time
+    And I edit the Occurrence  Tuesday  Wednesday 
+    And I click [Update]
+    Then the updated meeting is present
