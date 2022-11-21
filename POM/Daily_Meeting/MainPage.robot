@@ -1,17 +1,26 @@
 *** Settings ***
 Library  SeleniumLibrary
 Library  String 
+Resource  ../POM/ProjectsPage.robot
 
 *** Variables ***
 ${TITLE}
 
 *** Keywords ***
-I press log out button on the left side panel
-    wait until element is visible  (//span[contains(text(), 'Open')][1])[1]
-    click element  (//span[contains(text(), 'Open')][1])[1]
-    Wait Until Element Is Visible  //*[@id="root"]/section/aside/div/ul[2]/li[4]
-    Click Element  //*[@id="root"]/section/aside/div/ul[2]/li[4]  
 
+I am on Daily Stand-Up page
+   I press on project  1
+   Wait Until Element Is Visible  //h1[contains(text(), 'Daily Stand-Up')] 
+
+I press log out button on the left side panel
+    I press on project  1
+    I click on logout button
+
+I click on logout button 
+    Wait Until Element Is Visible  //*[@id="root"]/section/aside/div/ul[2]/li[3]/span[1]
+    Scroll Element Into View  //*[@id="root"]/section/aside/div/ul[2]/li[3]/span[1]
+    Click Element  //*[@id="root"]/section/aside/div/ul[2]/li[3]/span[1]
+    
 I am logged out and redirected to the main login page
      Wait Until Element Is Visible  id=basic_email
 

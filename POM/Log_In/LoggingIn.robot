@@ -11,6 +11,7 @@ ${manager_password}  amdaris
 
 *** Keywords ***
 I am logged in as Manager
+    Wait Until Element Is Visible  id=basic_email
     click element  id=basic_email
     input text  id=basic_email    ${manager_email}
     click element  id=basic_password

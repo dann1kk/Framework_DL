@@ -1,21 +1,34 @@
 *** Settings ***
-Library  SeleniumLibrary
+Library  SeleniumLibrary 
 Library  String
+Library  OperatingSystem    
 
 *** Variables ***
 ${TITLE}
 
 *** Keywords ***
+
 I drag and drop all templates
-    wait until page contains element  //div[contains(text(), 'ICE_BREAKING')]
-    drag and drop  //div[contains(text(), 'ICE_BREAKING')]  //div[@class="create-retro-template-form_dragger__YGSJp"]
-    drag and drop   //div[contains(text(), 'AGILE')]       //div[@class="create-retro-template-form_dragger__YGSJp"]
-    drag and drop   //div[contains(text(), 'TEAM_HEALTH_CHECK')]   //div[@class="create-retro-template-form_dragger__YGSJp"]
-    drag and drop  //div[contains(text(), 'EVENT_ENDING')]     //div[@class="create-retro-template-form_dragger__YGSJp"]
+    Wait Until Element Is Visible  //h1[contains(text(), 'Create new Retro meeting')]
+    ${js}        Get File              dragdrop.js
+    Execute Javascript    ${js}; return DragNDrop1("two", "bin");
+    Sleep  1s
+    Execute Javascript    ${js}; return DragNDrop2("two", "bin");
+    Sleep  1s
+    Execute Javascript    ${js}; return DragNDrop3("two", "bin");
+    Sleep  1s
+    Execute Javascript    ${js}; return DragNDrop4("two", "bin");
 
-<template> is present in the droppable area
+I reorder templates 
+    Scroll Element Into View  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/button
+    ${js}        Get File              dragdrop.js
+    Execute Javascript    ${js}; return DragNDrop5("two", "bin");
+    Sleep  1s
+    
 
-
+templates are present in the droppable area
+    Wait Until Element Is Visible  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/div[4]/div[1]
+     
 the Retro meeting form is displayed
     wait until element is visible  //h1[contains(text(), 'Create new Retro meeting')]
 
@@ -34,17 +47,17 @@ the user sets timer for <time> minutes
 
 the user selects today`s date
     click element  //input[@id='date']
+    Wait Until Element Is Visible  //a[contains(text(), 'Today')]
     click element  //a[contains(text(), 'Today')]
 
 the user selects a later time than the current time
     click element  //input[@id='time']
-    scroll element into view  //div[contains(text(), '23')]
-    click element  //div[contains(text(), '23')]
 
 the user clicks Ok button to save the time
-    click element  //span[contains(text(), 'OK')]
+    click element  //a[contains(text(), 'Now')]
 
 I click the [Create] button
+    Scroll Element Into View  //button[@type='submit']
     click element  //button[@type='submit']
 
 the Retro meeting is saved in the active tab
