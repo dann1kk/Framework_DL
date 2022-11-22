@@ -1,20 +1,30 @@
 *** Settings ***
 Library  SeleniumLibrary
 Resource  ../POM/ProjectsPage.robot
- 
+Resource  ../POM/Log_In/LoggingIn.robot
 *** Keywords ***
 I access retrospective page
-    I press on project  1
+    I press on project  21
     wait until element is visible  //*[@id="root"]/section/aside/div/ul[1]/li[2]
     click element  //*[@id="root"]/section/aside/div/ul[1]/li[2]
-    
+
+I joined the retrospective meeting
+    Wait Until Element Is Visible  (//span[contains(text(), 'Join')])[2]
+    Click Element  (//span[contains(text(), 'Join')])[2]
+
+a staff user joined the same active retrospective meeting
+    Open Browser   https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/retro  Firefox  options= add_argument("--incognito")
+    Maximize Browser Window
+    I am logged in as Staff
+    I joined the retrospective meeting
+
 retrospective page is displayed
    wait until element is visible  //h1[contains(text(), 'Retrospective')]
 active tab is opened
-    wait until page contains element  //div[contains(text(), 'Active')]
+    wait until page contains element  //div[@aria-selected='true'][.='Active']
 
 active retros are displayed in the active tab
-    wait until page contains element  //span[contains(text(), 'Join')
+    wait until page contains element  //span[contains(text(), 'Join')]
     
 I open create <retro> form
     wait until page contains element  //span[contains(text(), 'Create Retro')]
