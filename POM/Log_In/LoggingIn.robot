@@ -26,3 +26,12 @@ I am logged in as Staff
     click element  id=basic_password
     input text   id=basic_password  ${staff_password}
     Click Button  Sign in
+
+I am logged in as <User>
+    [Arguments]  ${User}
+    IF  "${User}" == "Manager"
+       I am logged in as Manager
+    ELSE IF  "${User}" == "Staff"
+       I am logged in as Staff
+    END
+

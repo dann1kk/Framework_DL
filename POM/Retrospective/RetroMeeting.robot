@@ -35,3 +35,15 @@ Guest user inserts his name
     
     Input Text  //input[@autocomplete='name']   Dan
      Click Element  //span[contains(text(), 'Submit')]
+
+I started the meeting
+    Wait Until Element Is Visible   //span[contains(text(), 'Start')]
+
+
+both users clicked on the notes button 
+    Switch Browser  1 
+    Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
+    Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
+    Switch Browser  2
+    Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
+    Click Element  //figure[@class="windows-chat_icon__Z4aj6"]

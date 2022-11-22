@@ -18,8 +18,6 @@ Test Setup  Open DL in Firefox
 Test Teardown  End Test
 
 *** Variables ***
-# link to a working daily with notes integrated
-${daily_meeting}  https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/daily/448
 # link to a templates page with templates created on it
 ${templates_page}  https://app-toolkit-frontend-qa.azurewebsites.net/project/7/retro?tab=templates
 # link to retro meeting with first template team_health_check
@@ -33,7 +31,7 @@ Test Case - Display active retros in Active tab
     When I access retrospective page
     Then retrospective page is displayed
     And active tab is opened
-    And active retros are displayed in the active tab
+ 
 
 Test Case - Display saved retros in Past tab
     Given I am logged in as Manager
@@ -49,15 +47,15 @@ Test Case - Check if all templates can be dragged and dropped in the droppable a
    Then templates are present in the droppable area
 
 Test Case - Adding Blank Messages in the Daily Stand-Up Notes
-    [Setup] 
-    Given DL joined the daily stand-up meeting as <User>  Manager  ${daily_meeting}
-    And the standup meeting has Notes integrated
+    Given I am logged in as <User>  Manager
+    And a standup meeting with Notes is created  2022  Nov  22  Tuesday
+    And I joined the Daily meeting 
     When @user writes a blank message in the Notes
     And @user tries to send the message
     Then a warning message is displayed
     And the message is not sent and displayed in Notes
 
-Test Case - Verify if manager can create and save a retro meeting
+Test Case - Verify if manager can create and save a retro meeting with all templates
     Given I am logged in as Manager
     And I access retrospective page
     When the user clicks [Create Retro] button
@@ -65,14 +63,13 @@ Test Case - Verify if manager can create and save a retro meeting
     And I type <title> in the retro template name field
     And the user ticks on the notes checkbox
     And I drag and drop all templates
-    And the user sets timer for <time> minutes  00
-    And the user selects today`s date
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  2023  Jul  20
     And the user selects a later time than the current time
     And the user clicks Ok button to save the time
     And I click the [Create] button
     Then the Retro meeting is saved in the active tab
     And user is redirected to the active retro page
-
 
 Test Case - Verify if can save a meeting without adding any templates in the droppable area
     Given I am logged in as Manager
@@ -99,10 +96,12 @@ Test Case - User is logged out after pressing log out button
     Given I am logged in as Manager
     When I press log out button on the left side panel
     Then I am logged out and redirected to the main login page
-
+# need locator for join at new created meeting
 Test Case - Reveal button Functionality
-    [Setup]  #give link to a started meeting with first template TEAM_HEALTH_CHECK (and votes (optional))
-    Given I am on TEAM_HEALTH_CHECK   ${team_health_check_link}
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -
+    And I joined the retrospective meeting
+    And I started the meeting
     When manager clicks reveal results button 
     Then the Reveal results button is replaced by hide results
 
@@ -146,8 +145,8 @@ Test Case - Create One-Time Daily Stand-up meeting
     And I am on Daily Stand-Up page
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
-    And I select Timer durration hours and minutes  01  15
-    And the user selects today`s date
+    And I select Timer duration hours and minutes  01  45
+    And the user selects date  2022  Nov  22
     And the user selects a later time than the current time
     And the user clicks Ok button to save the time
     And I select Occurrence one-time  Monday
@@ -160,8 +159,35 @@ Test Case - Edit Daily Stand-Up meeting
     When I click [Edit] button
     And I edit the event name  
     And I untick the Notes and Timer checkboxes
-    And I edit the Year, Month and Date  2024  Jul  1
+    And I edit the Year, Month and Date  2022  Nov  26
     And the user selects a later time than the current time
     And I edit the Occurrence  Tuesday  Wednesday 
     And I click [Update]
     Then the updated meeting is present
+
+# couldn't find locator for new created meeting join
+# Test Case - Check if users receive notifications when notes window is opened
+#     Given I am logged in as Manager 
+#     And a retrospective meeting with notes is created  2022  Nov  22
+#     And I joined the retrospective meeting
+#     And a staff user joined the same active retrospective meeting
+#     And both users clicked on the notes button 
+#     When staff sends a message in notes 
+#     Then the message is displayed in notes section for manager 
+#     And manager received a new message notification
+
+Test Case - Create Retrospective with particular templates
+    Given I am logged in as Manager
+    And I access retrospective page
+    When the user clicks [Create Retro] button
+    And the Retro meeting form is displayed
+    And I type <title> in the retro template name field
+    And the user ticks on the notes checkbox
+    And I drag <templates> in droppable area  EVENT_ENDING  -  AGILE  - 
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  2023  Jul  20
+    And the user selects a later time than the current time
+    And the user clicks Ok button to save the time
+    And I click the [Create] button
+    Then the Retro meeting is saved in the active tab
+    And user is redirected to the active retro page
