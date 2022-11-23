@@ -36,6 +36,14 @@ a daily stand-up meeting is created
     I select Occurrence one-time  Monday
     I click the [Create] button
 
+a daily stand-up meeting is created for today
+    I am on Daily Stand-Up page
+    I press Create Daily-Meeting button 
+    I type Daily-Meeting title
+    I select Timer duration hours and minutes  01  15
+    I choose date and time
+    I click the [Create] button
+
 I click [Edit] button
     Wait Until Element Is Visible  (//span[.='Edit'])[2]
     Click Element  (//span[.='Edit'])[2]

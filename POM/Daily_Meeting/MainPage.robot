@@ -17,6 +17,11 @@ I press log out button on the left side panel
     I click on logout button
 
 I joined the Daily meeting 
+    Sleep  2s
+    ${popup_visible}=  Get Element Count  //div[@class="feedback-modal_container__ly2We"]
+    IF  "${popup_visible}" == "1"
+       Click Element  //span[@class='ant-modal-close-x']
+    END
     Wait Until Element Is Visible  (//span[contains(text(), 'Join')])[2]
     Click Element  (//span[contains(text(), 'Join')])[2]
     

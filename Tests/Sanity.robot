@@ -216,3 +216,30 @@ Test Case - Verify if user is required to add event name, time and date.
 #     # And click check button
 #     # Then the criteria are edited 
 
+Test Case - Team Members are added to the Spinning Wheel upon joining daily
+    Given I am logged in as Manager
+    And a daily stand-up meeting is created for today
+    And I joined the Daily meeting
+    When teams members also joined the meeting
+    Then teams members are added and displayed on the spinning wheel
+    And manager is not displayed on the spinning wheel
+
+Test Case - Team Members are removed from the Spinning Wheel upon leaving daily
+    Given I am logged in as Manager
+    And a daily stand-up meeting is created for today
+    And I joined the Daily meeting
+    And teams members also joined the meeting
+    When teams members leave the meeting 
+    Then team members are removed from the spinning wheel 
+
+Test Case - Writing and sending messages in an active Daily Stand-Up Notes
+    Given I am logged in as Manager
+    And a daily stand-up meeting is created for today
+    And I joined the Daily meeting
+    And teams members also joined the meeting
+    When I write a message in notes  My message
+    And @user tries to send the message
+    Then the message is sent and displayed in Notes for all users 
+
+Test Case - Check side nav bar redirection
+    
