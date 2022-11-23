@@ -47,3 +47,23 @@ both users clicked on the notes button
     Switch Browser  2
     Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
     Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
+
+I edit multiple criteria 
+    [Arguments]  ${criteria1}  ${criteria2}  ${criteria3}  ${criteria4}  ${criteria5}
+    Wait Until Element Is Visible  (//span[@aria-label="edit"])[1]
+    Click Element  (//span[@aria-label="edit"])[1] 
+    Input Text  (//input[@type="text"])[1]  ${criteria1}
+    Click Element  //span[@aria-label="check"]
+    Click Element  (//span[@aria-label="edit"])[2] 
+    Input Text  (//input[@type="text"])[1]  ${criteria2}
+    Click Element  //span[@aria-label="check"]
+    Click Element  (//span[@aria-label="edit"])[3]
+    Input Text  (//input[@type="text"])[1]  ${criteria3}
+    Click Element  //span[@aria-label="check"]
+    Click Element  (//span[@aria-label="edit"])[4] 
+    Input Text  (//input[@type="text"])[1]  ${criteria4}
+    Click Element  //span[@aria-label="check"]
+    Click Element  (//span[@aria-label="edit"])[5] 
+    Input Text  (//input[@type="text"])[1]  ${criteria5}
+    Click Element  //span[@aria-label="check"]
+

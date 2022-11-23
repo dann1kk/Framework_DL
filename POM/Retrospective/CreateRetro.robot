@@ -29,6 +29,9 @@ templates are present in the droppable area
 the Retro meeting form is displayed
     wait until element is visible  //h1[contains(text(), 'Create new Retro meeting')]
 
+the Create meeting form is displayed
+    wait until element is visible  //h1[contains(text(), 'Create new')]
+
 I type <title> in the retro template name field
     Wait Until Element Is Visible  //input[@placeholder="Retro meeting name"]
     ${TITLE}=  Generate Random String  10  [LETTERS]
@@ -54,10 +57,11 @@ the user selects date
     Click Element  //div[@class='ant-picker-cell-inner'][.='${date}']
 
 the user selects a later time than the current time
-    click element  //input[@id='time']
-
-the user clicks Ok button to save the time
+    click element  //input[@id='time']    
     click element  //a[contains(text(), 'Now')]
+    Click Element  //input[@id='time']
+    Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    Click Element  //span[contains(text(), 'OK')]
 
 I click the [Create] button
     Execute Javascript  window.scrollTo(113, 754)
@@ -97,6 +101,9 @@ I choose date and time
     scroll element into view  //input[@id='time']
     click element  //input[@id='time']    
     click element  //a[contains(text(), 'Now')]
+    Click Element  //input[@id='time']
+    Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    Click Element  //span[contains(text(), 'OK')]
 
 retrospective meeting is created
     wait until element is visible  //div[contains(text(), '${TITLE}')]
@@ -169,7 +176,6 @@ a retrospective meeting with notes is created
     I select Timer duration hours and minutes  02  45
     the user selects date  ${year}  ${month}  ${day}
     the user selects a later time than the current time
-    the user clicks Ok button to save the time
     I click the [Create] button
     the Retro meeting is saved in the active tab
     user is redirected to the active retro page
@@ -184,8 +190,32 @@ a retro meeting with <templates> is created
     And I drag <templates> in droppable area  ${template1}  ${template2}  ${template3}  ${template4} 
     And I select Timer duration hours and minutes  02  45
     And I choose date and time
-    And the user selects a later time than the current time
-    And the user clicks Ok button to save the time
     And I click the [Create] button
     Then the Retro meeting is saved in the active tab
     And user is redirected to the active retro page
+
+I press 'X' button in the corner of the dropped <templates>
+    ${nr_templates}=  Get Element Count  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+    IF  "${nr_templates}" == "1"
+       Click Element  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+    ELSE IF  "${nr_templates}" == "2"
+       Click Element  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+       Click Element  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+    ELSE IF  "${nr_templates}" == "3"
+       Click Element  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+       Click Element  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+    ELSE IF  "${nr_templates}" == "4"
+       Click Element  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+       Click Element  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+       Click Element  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+       Click Element  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
+    END
+
+<templates> are removed from the droppable area
+    Wait Until Element Is Not Visible  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/div/div/div[1]
+
+warning messages are displayed for event name, time and date
+    Wait Until Element Is Visible  (//div[@role='alert'])[3]
+
+the meeting is not created
+    Wait Until Element Is Visible  //h1[contains(text(), 'Create new')]

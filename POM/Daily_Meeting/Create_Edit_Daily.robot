@@ -31,9 +31,8 @@ a daily stand-up meeting is created
     I press Create Daily-Meeting button 
     I type Daily-Meeting title
     I select Timer duration hours and minutes  01  15
-    I edit the Year, Month and Date  2022  Nov  27
+    I edit the Year, Month and Date  2022  Dec  27
     the user selects a later time than the current time
-    the user clicks Ok button to save the time
     I select Occurrence one-time  Monday
     I click the [Create] button
 
@@ -89,7 +88,6 @@ a standup meeting with Notes is created
     And I select Timer duration hours and minutes  01  45
     And the user selects date  ${year}  ${month}  ${day}
     And the user selects a later time than the current time
-    And the user clicks Ok button to save the time
     And I select Occurrence one-time  ${occurence}
     And I click the [Create] button
     Then the created meeting is present

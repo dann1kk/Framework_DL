@@ -66,7 +66,6 @@ Test Case - Verify if manager can create and save a retro meeting with all templ
     And I select Timer duration hours and minutes  02  45
     And the user selects date  2023  Jul  20
     And the user selects a later time than the current time
-    And the user clicks Ok button to save the time
     And I click the [Create] button
     Then the Retro meeting is saved in the active tab
     And user is redirected to the active retro page
@@ -148,7 +147,6 @@ Test Case - Create One-Time Daily Stand-up meeting
     And I select Timer duration hours and minutes  01  45
     And the user selects date  2022  Nov  22
     And the user selects a later time than the current time
-    And the user clicks Ok button to save the time
     And I select Occurrence one-time  Monday
     And I click the [Create] button
     Then the created meeting is present
@@ -159,7 +157,7 @@ Test Case - Edit Daily Stand-Up meeting
     When I click [Edit] button
     And I edit the event name  
     And I untick the Notes and Timer checkboxes
-    And I edit the Year, Month and Date  2022  Nov  26
+    And I edit the Year, Month and Date  2023  Nov  26
     And the user selects a later time than the current time
     And I edit the Occurrence  Tuesday  Wednesday 
     And I click [Update]
@@ -187,7 +185,34 @@ Test Case - Create Retrospective with particular templates
     And I select Timer duration hours and minutes  02  45
     And the user selects date  2023  Jul  20
     And the user selects a later time than the current time
-    And the user clicks Ok button to save the time
     And I click the [Create] button
     Then the Retro meeting is saved in the active tab
     And user is redirected to the active retro page
+
+Test Case - Check if templates can be removed from the droppable area
+    Given I am logged in as Manager
+    And I access retrospective page
+    When the user clicks [Create Retro] button
+    And the Retro meeting form is displayed
+    And I drag <templates> in droppable area  EVENT_ENDING  -  AGILE  - 
+    When I press 'X' button in the corner of the dropped <templates>
+    Then <templates> are removed from the droppable area
+
+Test Case - Verify if user is required to add event name, time and date.
+    Given I am logged in as Manager 
+    And the user is in Active tab on <Page>  Retro 
+    And the user clicks the [Create] button
+    And the Create meeting form is displayed
+    When I click the [Create] button
+    Then warning messages are displayed for event name, time and date
+    And the meeting is not created
+
+# no locator for join new created retro
+# Test Case - Edit multiple criteria with valid data on TEAM_HEALTH_CHECK
+#     Given I am logged in as Manager
+#     And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -
+#     And I joined the retrospective meeting
+#     When I edit multiple criteria  Edit   New  Abab   New Criteria  LorenIpsum 
+#     # And click check button
+#     # Then the criteria are edited 
+
