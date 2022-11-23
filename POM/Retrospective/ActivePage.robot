@@ -51,7 +51,9 @@ user clicks on [Invite] button
 the user sees a text notification "Copying to clipboard was successful!"
     Wait Until Element Is Visible  //div[contains(text(), 'Copying to clipboard was successful!')]
 
-
+the user clicks the [Create] button
+   Wait Until Element Is Visible  //span[contains(text(), 'Create')]
+   Click Element  //span[contains(text(), 'Create')]
 
 
 
