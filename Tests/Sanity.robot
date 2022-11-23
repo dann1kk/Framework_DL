@@ -48,7 +48,7 @@ Test Case - Check if all templates can be dragged and dropped in the droppable a
 
 Test Case - Adding Blank Messages in the Daily Stand-Up Notes
     Given I am logged in as <User>  Manager
-    And a standup meeting with Notes is created  2022  Nov  22  Tuesday
+    And a standup meeting with Notes is created  2022  Nov  23  Wednesday
     And I joined the Daily meeting 
     When @user writes a blank message in the Notes
     And @user tries to send the message
@@ -95,24 +95,25 @@ Test Case - User is logged out after pressing log out button
     Given I am logged in as Manager
     When I press log out button on the left side panel
     Then I am logged out and redirected to the main login page
-# need locator for join at new created meeting
-Test Case - Reveal button Functionality
-    Given I am logged in as Manager
-    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -
-    And I joined the retrospective meeting
-    And I started the meeting
-    When manager clicks reveal results button 
-    Then the Reveal results button is replaced by hide results
 
-Test Case - Hide button Functionality 
-    [Setup]  #give link to a started meeting with first template TEAM_HEALTH_CHECK (and votes (optional))
-    Given I am on TEAM_HEALTH_CHECK   ${team_health_check_link}
-    And I am logged in as Manager 
-    And manager clicks reveal results button
-    When manager clicks hide results button
-    Then hide results button is replaced with reveal results button
-    # give invite link for guests
-    And guest users don't see the voting results  https://app-toolkit-frontend-qa.azurewebsites.net/retro/invite?token=eyJhbGciOiJIUzI1NiJ9.eyJndWVzdF9pbmZvIjoicmV0cm86MTY0ODo5ODQiLCJpYXQiOjE2Njg2Mjk5MzJ9.0dxF3UU7NVmm-Z43GbBPuv79NOJ5MghfBdm-OAw-v8w
+# need locator for join at new created meeting
+# Test Case - Reveal button Functionality
+#     Given I am logged in as Manager
+#     And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -
+#     And I joined the retrospective meeting
+#     And I started the meeting
+#     When manager clicks reveal results button 
+#     Then the Reveal results button is replaced by hide results
+
+# Test Case - Hide button Functionality 
+#     [Setup]  #give link to a started meeting with first template TEAM_HEALTH_CHECK (and votes (optional))
+#     Given I am on TEAM_HEALTH_CHECK   ${team_health_check_link}
+#     And I am logged in as Manager 
+#     And manager clicks reveal results button
+#     When manager clicks hide results button
+#     Then hide results button is replaced with reveal results button
+#     # give invite link for guests
+#     And guest users don't see the voting results  https://app-toolkit-frontend-qa.azurewebsites.net/retro/invite?token=eyJhbGciOiJIUzI1NiJ9.eyJndWVzdF9pbmZvIjoicmV0cm86MTY0ODo5ODQiLCJpYXQiOjE2Njg2Mjk5MzJ9.0dxF3UU7NVmm-Z43GbBPuv79NOJ5MghfBdm-OAw-v8w
 
 Test Case - Check the meeting to be active 
     Given I am logged in as Manager 
@@ -125,12 +126,12 @@ Test Case - Check the meeting to be active
     Then the created meeting is present 
     And [Join] button is enabled
 # example multiple users with browsers
-Test Case - Test 2 browsers
-    [Setup]
-    Open and login 2 browsers
-    Switch to 1 browser
-    Switch to 2 browser
-    Click on browser 1
+# Test Case - Test 2 browsers
+#     [Setup]
+#     Open and login 2 browsers
+#     Switch to 1 browser
+#     Switch to 2 browser
+#     Click on browser 1
 
 Test Case - Generate invite link
     Given I am logged in as Manager
@@ -145,7 +146,7 @@ Test Case - Create One-Time Daily Stand-up meeting
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  01  45
-    And the user selects date  2022  Nov  22
+    And the user selects date  2022  Nov  23
     And the user selects a later time than the current time
     And I select Occurrence one-time  Monday
     And I click the [Create] button
@@ -200,7 +201,7 @@ Test Case - Check if templates can be removed from the droppable area
 
 Test Case - Verify if user is required to add event name, time and date.
     Given I am logged in as Manager 
-    And the user is in Active tab on <Page>  Retro 
+    And the user is in Active tab on <Page>  Daily 
     And the user clicks the [Create] button
     And the Create meeting form is displayed
     When I click the [Create] button
@@ -241,5 +242,5 @@ Test Case - Writing and sending messages in an active Daily Stand-Up Notes
     And @user tries to send the message
     Then the message is sent and displayed in Notes for all users 
 
-Test Case - Check side nav bar redirection
+# Test Case - Check side nav bar redirection
     
