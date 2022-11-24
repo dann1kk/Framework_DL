@@ -1,6 +1,13 @@
 *** Settings ***
 Library  SeleniumLibrary
 
+*** Variables ***
+${criteria1}
+${criteria2}
+${criteria3}
+${criteria4}
+${criteria5}
+
 *** Keywords ***
 
 I am on TEAM_HEALTH_CHECK 
@@ -38,6 +45,7 @@ Guest user inserts his name
 
 I started the meeting
     Wait Until Element Is Visible   //span[contains(text(), 'Start')]
+    Click Element  //span[contains(text(), 'Start')]
 
 
 both users clicked on the notes button 
@@ -48,8 +56,60 @@ both users clicked on the notes button
     Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
     Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
 
+staff sends a few messages in notes 
+    Wait Until Element Is Visible  //input[@id="message"]
+    Sleep  1s
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  blabla
+
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  blabla2
+    Sleep  1s
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  blabla3
+    Sleep  1s
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  blabla4
+    Sleep  1s
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  blabla5
+    Sleep  1s
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  blabla6
+    Sleep  1s
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+
+the messages are displayed in notes section for manager
+    Switch Browser  1
+    Wait Until Element Is Visible  //li[@class="chat_messageReceived__i8WCY"]
+    Wait Until Element Is Visible  //li[@class="chat_messageReceived__i8WCY"]
+    Wait Until Element Is Visible  //li[@class="chat_messageReceived__i8WCY"]
+    Wait Until Element Is Visible  //li[@class="chat_messageReceived__i8WCY"]
+    Wait Until Element Is Visible  //li[@class="chat_messageReceived__i8WCY"]
+
+staff clicked on the notes button
+    Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
+    Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
+
+manager receives message notification
+    Switch Browser  1
+    Wait Until Element Is Visible  //figure[@class="windows-chat_notification__KdskE"]
+
+a new message notification is visible
+   Wait Until Element Is Visible  //div[@class="chat_messageNotificationButton__HPJI-"]
+
 I edit multiple criteria 
     [Arguments]  ${criteria1}  ${criteria2}  ${criteria3}  ${criteria4}  ${criteria5}
+    Set Suite Variable  ${criteria1}
+    Set Suite Variable  ${criteria2}
+    Set Suite Variable  ${criteria3}
+    Set Suite Variable  ${criteria4}
+    Set Suite Variable  ${criteria5}
     Wait Until Element Is Visible  (//span[@aria-label="edit"])[1]
     Click Element  (//span[@aria-label="edit"])[1] 
     Input Text  (//input[@type="text"])[1]  ${criteria1}
@@ -67,3 +127,9 @@ I edit multiple criteria
     Input Text  (//input[@type="text"])[1]  ${criteria5}
     Click Element  //span[@aria-label="check"]
 
+the new criterias are saved and visible 
+    Wait Until Element Is Visible  //span[contains(text(), '${criteria1}')]
+    Wait Until Element Is Visible  //span[contains(text(), '${criteria2}')]
+    Wait Until Element Is Visible  //span[contains(text(), '${criteria3}')]
+    Wait Until Element Is Visible  //span[contains(text(), '${criteria4}')]
+    Wait Until Element Is Visible  //span[contains(text(), '${criteria5}')]
