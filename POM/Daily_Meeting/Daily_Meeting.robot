@@ -62,13 +62,37 @@ I write a message in notes
     Switch Browser  1
     Wait Until Element Is Visible  //input[@class="ant-input"]
     input text   //input[@class="ant-input"]    ${message}
+    Sleep  1s
 
 the message is sent and displayed in Notes for all users 
     Wait Until Element Is Visible  //*[@id="messageList"]/ul/li[1]/div  
     Switch Browser  2
     Wait Until Element Is Visible  //*[@id="messageList"]/ul/li[1]/div
 
+I write a few messages in notes
+    [Arguments]   ${message1}  ${message2}
+    Wait Until Element Is Visible  //input[@class="ant-input"]
+    input text   //input[@class="ant-input"]    ${message1}
+    click element  //span[@aria-label='send']
+    Wait Until Element Is Visible  //input[@class="ant-input"]
+    input text   //input[@class="ant-input"]    ${message2}
+    click element  //span[@aria-label='send']
+    Sleep  1s
 
+
+I end the meeting
+    Wait Until Element Is Visible  //span[contains(text(), 'End Meeting')]
+    Click Element  //span[contains(text(), 'End Meeting')]
+
+save notes checkbox is ticked
+    Click Element  //span[contains(text(), 'OK')]
+
+the meeting notes are saved in Past tab
+    Click Element  //div[contains(text(), 'Past')]
+    Wait Until Element Is Visible  (//span[contains(text(), 'View')])[2]
+    Click Element  (//span[contains(text(), 'View')])[2]
+    Wait Until Element Is Visible  //*[@id="messageList"]/ul/li[1]
+    Wait Until Element Is Visible  //*[@id="messageList"]/ul/li[2]
 
 
 

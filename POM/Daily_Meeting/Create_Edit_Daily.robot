@@ -35,6 +35,11 @@ a daily stand-up meeting is created
     the user selects a later time than the current time
     I select Occurrence one-time  Monday
     I click the [Create] button
+    Sleep  2s
+    ${popup_visible}=  Get Element Count  //div[@class="feedback-modal_container__ly2We"]
+    IF  "${popup_visible}" == "1"
+       Click Element  //span[@class='ant-modal-close-x']
+    END
 
 a daily stand-up meeting is created for today
     I am on Daily Stand-Up page
