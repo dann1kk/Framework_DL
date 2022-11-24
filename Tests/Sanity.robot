@@ -266,3 +266,14 @@ Test Case - Daily meeting Notes are saved in Past tab
     And save notes checkbox is ticked
     Then I get redirected to the main page
     And the meeting notes are saved in Past tab
+
+Test Case - Past Daily meeting can be deleted
+    Given I am logged in as manager
+    And a daily stand-up meeting is created for today
+    And I joined the Daily meeting
+    And I end the meeting
+    And save notes checkbox is ticked
+    When I click on Past button
+    And I click [Delete] button on Daily meeting
+    And I confirm that I want to delete meeting
+    Then the meeting is deleted
