@@ -242,5 +242,27 @@ Test Case - Writing and sending messages in an active Daily Stand-Up Notes
     And @user tries to send the message
     Then the message is sent and displayed in Notes for all users 
 
-# Test Case - Check side nav bar redirection
-    
+Test Case - Check side nav bar redirection
+    Given I am logged in as Manager
+    And I am on Daily Stand-Up page
+    And side navigation bar is visible
+    When I click navigation bar <button>  Retro
+    Then the button redirects me to <page>  Retrospective 
+
+Test Case - Delete a Daily Stand-Up meeting
+    Given I am logged in as Manager
+    And a daily stand-up meeting is created for today
+    When I click [Delete] button on Daily meeting
+    And I confirm that I want to delete meeting
+    Then the meeting is deleted
+    And is not saved in past tab
+
+Test Case - Daily meeting Notes are saved in Past tab
+    Given I am logged in as Manager
+    And a daily stand-up meeting is created for today
+    And I joined the Daily meeting
+    And I write a few messages in notes  Buna ziua  Buna seara
+    When I end the meeting
+    And save notes checkbox is ticked
+    Then I get redirected to the main page
+    And the meeting notes are saved in Past tab

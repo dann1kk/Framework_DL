@@ -60,7 +60,12 @@ the user selects a later time than the current time
     click element  //input[@id='time']    
     click element  //a[contains(text(), 'Now')]
     Click Element  //input[@id='time']
-    Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    ${5min_present}=  Get Element Count   (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    IF  "${5min_present}" == "1"
+       Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    ELSE 
+       Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][1]
+    END
     Click Element  //span[contains(text(), 'OK')]
 
 I click the [Create] button
@@ -102,7 +107,12 @@ I choose date and time
     click element  //input[@id='time']    
     click element  //a[contains(text(), 'Now')]
     Click Element  //input[@id='time']
-    Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    ${5min_present}=  Get Element Count   (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    IF  "${5min_present}" == "1"
+       Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    ELSE 
+       Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][1]
+    END
     Click Element  //span[contains(text(), 'OK')]
 
 retrospective meeting is created
