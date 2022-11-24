@@ -2,20 +2,17 @@
 Library  SeleniumLibrary
 Resource  ../POM/ProjectsPage.robot
 Resource  ../POM/Log_In/LoggingIn.robot
+Resource  ../POM/Retrospective/CreateRetro.robot
 *** Keywords ***
 I access retrospective page
     I press on project  21
     wait until element is visible  //*[@id="root"]/section/aside/div/ul[1]/li[2]
     click element  //*[@id="root"]/section/aside/div/ul[1]/li[2]
     Sleep  2s
-    ${popup_visible}=  Get Element Count  //div[@class="feedback-modal_container__ly2We"]
+    ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
     IF  "${popup_visible}" == "1"
-       Click Element  //span[@class='ant-modal-close-x']
+       Click Element  //span[@aria-label="close"]
     END
-
-I joined the retrospective meeting
-    Wait Until Element Is Visible  (//span[contains(text(), 'Join')])[2]
-    Click Element  (//span[contains(text(), 'Join')])[2]
 
 a staff user joined the same active retrospective meeting
     Open Browser   https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/retro  Firefox  options= add_argument("--incognito")
@@ -47,10 +44,12 @@ the user is in Active tab on <Page>
     I press on project  21
     END
     Sleep  1s
-    ${popup_visible}=  Get Element Count  //div[@class="feedback-modal_container__ly2We"]
+     ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
     IF  "${popup_visible}" == "1"
-       Click Element  //span[@class='ant-modal-close-x']
+       Click Element  //span[@aria-label="close"]
     END
+
+
 
 the user can see the [Invite] button next to an active event
     Wait Until Element Is Visible  (//Span[contains(text(), 'Invite')])[2]

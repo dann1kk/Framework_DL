@@ -19,19 +19,20 @@ I am on Daily Stand-Up page
     
 I press log out button on the left side panel
     I press on project  1
+    Wait Until Element Is Visible  //h1[contains(text(), 'Daily Stand-Up')] 
     Execute Javascript  window.scrollTo(1536, 739)
     I click on logout button
 
 I joined the Daily meeting 
     Sleep  2s
-    ${popup_visible}=  Get Element Count  //div[@class="feedback-modal_container__ly2We"]
+     ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
     IF  "${popup_visible}" == "1"
-       Click Element  //span[@class='ant-modal-close-x']
+       Click Element  //span[@aria-label="close"]
     END
     Wait Until Element Is Visible  (//span[contains(text(), 'Join')])[2]
     Click Element  (//span[contains(text(), 'Join')])[2]
     
-I click on logout button 
+I click on logout button  
     Scroll Element Into View  //span[@aria-label="logout"]
     Wait Until Element Is Visible  //span[@aria-label="logout"]
     Click Element  //span[@aria-label="logout"]
@@ -47,9 +48,15 @@ I press Create Daily-Meeting button
 I type Daily-Meeting title 
     Wait Until Element Is Visible  //input[@placeholder="Event name"]
     ${TITLE}=  Generate Random String  10  [LETTERS]
+    Set Global Variable  ${TITLE}
     Input Text  //input[@placeholder="Event name"]   ${TITLE}
 
 I get redirected to the main page
+    Sleep  2s
+    ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
+    IF  "${popup_visible}" == "1"
+       Click Element  //span[@aria-label="close"]
+    END
     Wait Until Element Is Visible  //h1[contains(text(), 'Daily Stand-Up')]
 
 the created meeting is present 

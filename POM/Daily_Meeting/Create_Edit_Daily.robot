@@ -5,6 +5,7 @@ Resource  ../POM/Daily_Meeting/MainPage.robot
 
 *** Variables ***
 ${Result}
+${TITLE2}
 *** Keywords ***
 
 I select Timer duration hours and minutes  
@@ -36,10 +37,11 @@ a daily stand-up meeting is created
     I select Occurrence one-time  Monday
     I click the [Create] button
     Sleep  2s
-    ${popup_visible}=  Get Element Count  //div[@class="feedback-modal_container__ly2We"]
+    ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
     IF  "${popup_visible}" == "1"
-       Click Element  //span[@class='ant-modal-close-x']
+       Click Element  //span[@aria-label="close"]
     END
+
 
 a daily stand-up meeting is created for today
     I am on Daily Stand-Up page
@@ -55,8 +57,9 @@ I click [Edit] button
 
 I edit the event name
      Wait Until Element Is Visible  //input[@placeholder="Event name"]
-    ${TITLE}=  Generate Random String  20  [LETTERS][NUMBERS]
-    Input Text  //input[@placeholder="Event name"]   ${TITLE}
+    ${TITLE2}=  Generate Random String  20  [LETTERS][NUMBERS]
+    Set Global Variable  ${TITLE2}
+    Input Text  //input[@placeholder="Event name"]   ${TITLE2}
 
 I untick the Notes and Timer checkboxes
     Click Element  //input[@id='notes']
@@ -91,7 +94,7 @@ I click [Update]
     Click Element  //button[.='Update']
 
 the updated meeting is present 
-    Wait Until Element Is Visible   //div[contains(text(), '${TITLE}')]
+    Wait Until Element Is Visible   //div[contains(text(), '${TITLE2}')]
 
 a standup meeting with Notes is created 
     [Arguments]  ${year}  ${month}  ${day}  ${occurence}

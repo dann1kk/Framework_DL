@@ -5,12 +5,10 @@ Library  OperatingSystem
 Resource  ../POM/Retrospective/ActivePage.robot
 Resource  ../POM/Daily_Meeting/Create_Edit_Daily.robot
 *** Variables ***
-${TITLE}
 
 @{templates}   
 
 *** Keywords ***
-
 I drag and drop all templates
     Wait Until Element Is Visible  //h1[contains(text(), 'Create new Retro meeting')]
     Drag And Drop  //div[contains(text(), 'ICE_BREAKING')]  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]
@@ -35,7 +33,12 @@ the Create meeting form is displayed
 I type <title> in the retro template name field
     Wait Until Element Is Visible  //input[@placeholder="Retro meeting name"]
     ${TITLE}=  Generate Random String  10  [LETTERS]
+    Set Global Variable  ${TITLE} 
     input text  //input[@placeholder="Retro meeting name"]  ${TITLE}
+
+I joined the retrospective meeting
+    Wait Until Element Is Visible  (//div[.='${TITLE}']/parent::li//button)[1] 
+    Click Element  (//div[.='${TITLE}']/parent::li//button)[1] 
 
 the user ticks on the notes checkbox
     click element  //input[@id="notes"]
@@ -106,14 +109,15 @@ I choose date and time
     scroll element into view  //input[@id='time']
     click element  //input[@id='time']    
     click element  //a[contains(text(), 'Now')]
-    Click Element  //input[@id='time']
-    ${5min_present}=  Get Element Count   (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
-    IF  "${5min_present}" == "1"
-       Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
-    ELSE 
-       Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][1]
-    END
-    Click Element  //span[contains(text(), 'OK')]
+    # Click Element  //input[@id='time']
+    # Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][1]
+    # ${5min_present}=  Get Element Count   (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    # IF  "${5min_present}" == "1"
+    #    Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    # ELSE 
+    #    Click Element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][1]
+    # END
+    # Click Element  //span[contains(text(), 'OK')]
 
 retrospective meeting is created
     wait until element is visible  //div[contains(text(), '${TITLE}')]
@@ -175,8 +179,8 @@ I drag <templates> in droppable area
         Sleep  1s 
     END
 
-a retrospective meeting with notes is created 
-    [Arguments]  ${year}  ${month}  ${day}  
+
+a retrospective meeting with notes is created   
     I access retrospective page
     the user clicks [Create Retro] button
     the Retro meeting form is displayed
@@ -184,14 +188,13 @@ a retrospective meeting with notes is created
     the user ticks on the notes checkbox
     I drag and drop all templates
     I select Timer duration hours and minutes  02  45
-    the user selects date  ${year}  ${month}  ${day}
-    the user selects a later time than the current time
+    I choose date and time
     I click the [Create] button
     the Retro meeting is saved in the active tab
     user is redirected to the active retro page
 
 a retro meeting with <templates> is created
-    [Arguments]  ${template1}  ${template2}  ${template3}  ${template4}  
+    [Arguments]  ${template1}  ${template2}  ${template3}  ${template4}  ${year}  ${month}  ${date}
     And I access retrospective page
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
@@ -199,7 +202,8 @@ a retro meeting with <templates> is created
     And the user ticks on the notes checkbox
     And I drag <templates> in droppable area  ${template1}  ${template2}  ${template3}  ${template4} 
     And I select Timer duration hours and minutes  02  45
-    And I choose date and time
+    And the user selects date   ${year}  ${month}  ${date}
+    And the user selects a later time than the current time
     And I click the [Create] button
     Then the Retro meeting is saved in the active tab
     And user is redirected to the active retro page

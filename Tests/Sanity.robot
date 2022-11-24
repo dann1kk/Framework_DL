@@ -20,8 +20,7 @@ Test Teardown  End Test
 *** Variables ***
 # link to a templates page with templates created on it
 ${templates_page}  https://app-toolkit-frontend-qa.azurewebsites.net/project/7/retro?tab=templates
-# link to retro meeting with first template team_health_check
-${team_health_check_link}
+
 
 
 
@@ -48,7 +47,7 @@ Test Case - Check if all templates can be dragged and dropped in the droppable a
 
 Test Case - Adding Blank Messages in the Daily Stand-Up Notes
     Given I am logged in as <User>  Manager
-    And a standup meeting with Notes is created  2022  Nov  23  Wednesday
+    And a standup meeting with Notes is created  2022  Nov  24  Thursday
     And I joined the Daily meeting 
     When @user writes a blank message in the Notes
     And @user tries to send the message
@@ -96,35 +95,36 @@ Test Case - User is logged out after pressing log out button
     When I press log out button on the left side panel
     Then I am logged out and redirected to the main login page
 
-# need locator for join at new created meeting
-# Test Case - Reveal button Functionality
-#     Given I am logged in as Manager
-#     And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -
-#     And I joined the retrospective meeting
-#     And I started the meeting
-#     When manager clicks reveal results button 
-#     Then the Reveal results button is replaced by hide results
+Test Case - Reveal button Functionality
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -
+    And I joined the retrospective meeting
+    And I started the meeting
+    When manager clicks reveal results button 
+    Then the Reveal results button is replaced by hide results
 
-# Test Case - Hide button Functionality 
-#     [Setup]  #give link to a started meeting with first template TEAM_HEALTH_CHECK (and votes (optional))
-#     Given I am on TEAM_HEALTH_CHECK   ${team_health_check_link}
-#     And I am logged in as Manager 
-#     And manager clicks reveal results button
-#     When manager clicks hide results button
-#     Then hide results button is replaced with reveal results button
-#     # give invite link for guests
-#     And guest users don't see the voting results  https://app-toolkit-frontend-qa.azurewebsites.net/retro/invite?token=eyJhbGciOiJIUzI1NiJ9.eyJndWVzdF9pbmZvIjoicmV0cm86MTY0ODo5ODQiLCJpYXQiOjE2Njg2Mjk5MzJ9.0dxF3UU7NVmm-Z43GbBPuv79NOJ5MghfBdm-OAw-v8w
+Test Case - Hide button Functionality 
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  - 
+    And I joined the retrospective meeting
+    And I started the meeting
+    And manager clicks reveal results button
+    When manager clicks hide results button
+    Then hide results button is replaced with reveal results button
+    #  And guest users don't see the voting results  https://app-toolkit-frontend-qa.azurewebsites.net/retro/invite?token=eyJhbGciOiJIUzI1NiJ9.eyJndWVzdF9pbmZvIjoicmV0cm86MTY0ODo5ODQiLCJpYXQiOjE2Njg2Mjk5MzJ9.0dxF3UU7NVmm-Z43GbBPuv79NOJ5MghfBdm-OAw-v8w
 
 Test Case - Check the meeting to be active 
     Given I am logged in as Manager 
     And I am on Daily Stand-Up page 
     And I press Create Daily-Meeting button
     And I type Daily-Meeting title 
-    And I choose date and time 
+    And the user selects date  2022  Nov  24
+    And the user selects a later time than the current time
     When I click the [Create] button 
     And I get redirected to the main page
     Then the created meeting is present 
     And [Join] button is enabled
+
 # example multiple users with browsers
 # Test Case - Test 2 browsers
 #     [Setup]
@@ -146,7 +146,7 @@ Test Case - Create One-Time Daily Stand-up meeting
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  01  45
-    And the user selects date  2022  Nov  23
+    And the user selects date  2022  Nov  24
     And the user selects a later time than the current time
     And I select Occurrence one-time  Monday
     And I click the [Create] button
@@ -164,16 +164,25 @@ Test Case - Edit Daily Stand-Up meeting
     And I click [Update]
     Then the updated meeting is present
 
-# couldn't find locator for new created meeting join
-# Test Case - Check if users receive notifications when notes window is opened
-#     Given I am logged in as Manager 
-#     And a retrospective meeting with notes is created  2022  Nov  22
-#     And I joined the retrospective meeting
-#     And a staff user joined the same active retrospective meeting
-#     And both users clicked on the notes button 
-#     When staff sends a message in notes 
-#     Then the message is displayed in notes section for manager 
-#     And manager received a new message notification
+
+Test Case - Check if users receive notifications when notes window is opened
+    Given I am logged in as Manager 
+    And a retrospective meeting with notes is created
+    And I joined the retrospective meeting
+    And a staff user joined the same active retrospective meeting
+    And both users clicked on the notes button 
+    When staff sends a few messages in notes 
+    Then the messages are displayed in notes section for manager
+    And a new message notification is visible
+
+Test Case - Check if users receive notifications when notes window is closed
+    Given I am logged in as Manager 
+    And a retrospective meeting with notes is created
+    And I joined the retrospective meeting
+    And a staff user joined the same active retrospective meeting
+    And staff clicked on the notes button
+    When staff sends a few messages in notes 
+    Then manager receives message notification
 
 Test Case - Create Retrospective with particular templates
     Given I am logged in as Manager
@@ -208,14 +217,13 @@ Test Case - Verify if user is required to add event name, time and date.
     Then warning messages are displayed for event name, time and date
     And the meeting is not created
 
-# no locator for join new created retro
-# Test Case - Edit multiple criteria with valid data on TEAM_HEALTH_CHECK
-#     Given I am logged in as Manager
-#     And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -
-#     And I joined the retrospective meeting
-#     When I edit multiple criteria  Edit   New  Abab   New Criteria  LorenIpsum 
-#     # And click check button
-#     # Then the criteria are edited 
+
+Test Case - Edit multiple criteria with valid data on TEAM_HEALTH_CHECK
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  2022  Nov  24
+    And I joined the retrospective meeting
+    When I edit multiple criteria  Edit   New   Abab   New Criteria  LorenIpsum 
+    Then the new criterias are saved and visible 
 
 Test Case - Team Members are added to the Spinning Wheel upon joining daily
     Given I am logged in as Manager
