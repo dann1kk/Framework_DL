@@ -44,6 +44,7 @@ Guest user inserts his name
      Click Element  //span[contains(text(), 'Submit')]
 
 I started the meeting
+    Switch Browser  1
     Wait Until Element Is Visible   //span[contains(text(), 'Start')]
     Click Element  //span[contains(text(), 'Start')]
 
@@ -96,6 +97,10 @@ staff clicked on the notes button
     Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
     Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
 
+I clicked on the notes button
+    Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
+    Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
+
 manager receives message notification
     Switch Browser  1
     Wait Until Element Is Visible  //figure[@class="windows-chat_notification__KdskE"]
@@ -133,3 +138,45 @@ the new criterias are saved and visible
     Wait Until Element Is Visible  //span[contains(text(), '${criteria3}')]
     Wait Until Element Is Visible  //span[contains(text(), '${criteria4}')]
     Wait Until Element Is Visible  //span[contains(text(), '${criteria5}')]
+
+I click End 
+    Wait Until Element Is Visible  //span[contains(text(),'End')]
+    Click Element  //span[contains(text(),'End')]
+
+I <action> notes checkbox
+    [Arguments]  ${action}
+    IF  "${action}" == "untick"
+    Click Element  //input[@type="checkbox"]
+    END
+I click <Element>
+    [Arguments]  ${Element} 
+    IF  "${Element}" == "x"
+    Click Element  //span[@class='ant-modal-close-x']
+    ELSE IF  "${Element}" == "Cancel"
+    Click Element  (//button[@class="ant-btn ant-btn-default"])[2]
+    ELSE IF  "${Element}" == "Outside"
+    Click Element  //div[@class="ant-modal-wrap"]  
+    END
+
+the Retro meeting doesn't end 
+    Wait Until Element Is Visible  //span[contains(text(),'End')]
+
+I moved to the next template 
+    Switch Browser  1
+    Wait Until Element Is Visible  //span[contains(text(),'Next')]
+    Click Element  //span[contains(text(),'Next')]
+    
+
+the Notes window remains opened
+    Wait Until Element Is Visible  //div[@id="messageList"]
+
+all participants can write messages in the Notes
+    Wait Until Element Is Visible  //input[@id="message"]
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  blabla
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Switch Browser  2
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  blabla
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    

@@ -97,7 +97,7 @@ Test Case - User is logged out after pressing log out button
 
 Test Case - Reveal button Functionality
     Given I am logged in as Manager
-    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -  2022  11  Nov
     And I joined the retrospective meeting
     And I started the meeting
     When manager clicks reveal results button 
@@ -105,7 +105,7 @@ Test Case - Reveal button Functionality
 
 Test Case - Hide button Functionality 
     Given I am logged in as Manager
-    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  - 
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -   2022  11  Nov 
     And I joined the retrospective meeting
     And I started the meeting
     And manager clicks reveal results button
@@ -285,3 +285,24 @@ Test Case - Past Daily meeting can be deleted
     And I click [Delete] button on Daily meeting
     And I confirm that I want to delete meeting
     Then the meeting is deleted
+
+Test Case - Retro End meeting and cancel
+    Given I am logged in as manager
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  2022  Nov  24
+    And I joined the retrospective meeting
+    When I started the meeting
+    And I click End 
+    And I <action> notes checkbox  untick
+    And I click <Element>  Cancel 
+    Then the Retro meeting doesn't end  
+
+Test Case - Retro Chat notes not closed upon switching template
+    Given I am logged in as manager
+    And a retrospective meeting with notes is created
+    And I joined the retrospective meeting
+    And a staff user joined the same active retrospective meeting
+    When I started the meeting
+    And both users clicked on the notes button 
+    And I moved to the next template 
+    Then the Notes window remains opened
+    And all participants can write messages in the Notes 
