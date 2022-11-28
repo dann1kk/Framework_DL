@@ -47,7 +47,7 @@ Test Case - Check if all templates can be dragged and dropped in the droppable a
 
 Test Case - Adding Blank Messages in the Daily Stand-Up Notes
     Given I am logged in as <User>  Manager
-    And a standup meeting with Notes is created  2022  Nov  24  Thursday
+    And a standup meeting with Notes is created  2022  Nov  25  Friday
     And I joined the Daily meeting 
     When @user writes a blank message in the Notes
     And @user tries to send the message
@@ -97,7 +97,7 @@ Test Case - User is logged out after pressing log out button
 
 Test Case - Reveal button Functionality
     Given I am logged in as Manager
-    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -  2022  11  Nov
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -  2022  Nov  25
     And I joined the retrospective meeting
     And I started the meeting
     When manager clicks reveal results button 
@@ -105,7 +105,7 @@ Test Case - Reveal button Functionality
 
 Test Case - Hide button Functionality 
     Given I am logged in as Manager
-    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -   2022  11  Nov 
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -   2022  Nov  25 
     And I joined the retrospective meeting
     And I started the meeting
     And manager clicks reveal results button
@@ -118,7 +118,7 @@ Test Case - Check the meeting to be active
     And I am on Daily Stand-Up page 
     And I press Create Daily-Meeting button
     And I type Daily-Meeting title 
-    And the user selects date  2022  Nov  24
+    And the user selects date  2022  Nov  25
     And the user selects a later time than the current time
     When I click the [Create] button 
     And I get redirected to the main page
@@ -146,7 +146,7 @@ Test Case - Create One-Time Daily Stand-up meeting
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  01  45
-    And the user selects date  2022  Nov  24
+    And the user selects date  2022  Nov  25
     And the user selects a later time than the current time
     And I select Occurrence one-time  Monday
     And I click the [Create] button
@@ -220,7 +220,7 @@ Test Case - Verify if user is required to add event name, time and date.
 
 Test Case - Edit multiple criteria with valid data on TEAM_HEALTH_CHECK
     Given I am logged in as Manager
-    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  2022  Nov  24
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  2022  Nov  25
     And I joined the retrospective meeting
     When I edit multiple criteria  Edit   New   Abab   New Criteria  LorenIpsum 
     Then the new criterias are saved and visible 
@@ -288,7 +288,7 @@ Test Case - Past Daily meeting can be deleted
 
 Test Case - Retro End meeting and cancel
     Given I am logged in as manager
-    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  2022  Nov  24
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  2022  Nov  25
     And I joined the retrospective meeting
     When I started the meeting
     And I click End 
@@ -306,3 +306,41 @@ Test Case - Retro Chat notes not closed upon switching template
     And I moved to the next template 
     Then the Notes window remains opened
     And all participants can write messages in the Notes 
+
+Test Case - Check End button functionality - all templates empty
+    Given I am logged in as Manager
+    And a retrospective meeting with notes is created
+    And I joined the retrospective meeting
+    When I started the meeting
+    And I moved to the last template
+    And I click End
+    And I confirm that I want to end meeting
+    Then the meeting is deleted
+
+Test Case - Check End button functionality - all templates filled
+    Given I am logged in as Manager
+    And a retrospective meeting with notes is created
+    And I joined the retrospective meeting
+    And I started the meeting
+    When I fill data on all templates
+    And I confirm that I want to end meeting
+    Then the meeting is deleted
+
+Test Case - Submit the vote with various voting combinations on TEAM_HEALTH_CHECK
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  2022  Nov  25
+    And I joined the retrospective meeting
+    And I started the meeting
+    When I submit my <state1> and <state2> in TEAM_HEALTH_CHECK   Normal   Constant
+    Then I am redirected to TEAM_HEALTH_CHECK template
+    And my votes are saved in the table
+
+Test Case - Voting results are updated in real-life
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  2022  Nov  25
+    And I joined the retrospective meeting
+    And a staff user joined the same active retrospective meeting
+    And I started the meeting
+    When staff submits <state1> and <state2> in TEAM_HEALTH_CHECK  Normal  Constant
+    When I submit my <state1> and <state2> in TEAM_HEALTH_CHECK   Normal   Constant
+    Then the voting results are updated in real life for both users

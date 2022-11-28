@@ -76,6 +76,11 @@ I click the [Create] button
     click element  //button[@type='submit']
 
 the Retro meeting is saved in the active tab
+    Sleep  1s
+    ${meeting_on_1stpage}=  Get Element Count  //div[contains(text(), '${TITLE}')]
+    IF  "${meeting_on_1stpage}" == "0"
+        Click Element  //span[@aria-label="right"]
+    END
     wait until element is visible  //div[contains(text(), '${TITLE}')]
 
 user is redirected to the active retro page
@@ -120,6 +125,10 @@ I choose date and time
     # Click Element  //span[contains(text(), 'OK')]
 
 retrospective meeting is created
+    ${meeting_on_1stpage}=  Get Element Count  //div[contains(text(), '${TITLE}')]
+    IF  "${meeting_on_1stpage}" == "0"
+        Click Element  //span[@aria-label="right"]
+    END
     wait until element is visible  //div[contains(text(), '${TITLE}')]
 
 

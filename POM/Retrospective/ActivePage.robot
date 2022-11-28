@@ -15,7 +15,7 @@ I access retrospective page
     END
 
 a staff user joined the same active retrospective meeting
-    Open Browser   https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/retro  Firefox  options= add_argument("--incognito")
+    Open Browser   https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/retro  Firefox  options= add_argument("--private")
     Maximize Browser Window
     I am logged in as Staff
     I joined the retrospective meeting

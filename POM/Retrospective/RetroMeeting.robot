@@ -1,12 +1,13 @@
 *** Settings ***
 Library  SeleniumLibrary
-
+Library  String
 *** Variables ***
 ${criteria1}
 ${criteria2}
 ${criteria3}
 ${criteria4}
 ${criteria5}
+@{list_states}  Normal  
 
 *** Keywords ***
 
@@ -179,4 +180,168 @@ all participants can write messages in the Notes
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  blabla
     Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+
+I confirm that I want to end meeting
+    Click Element  //span[contains(text(), 'OK')]
     
+I moved to the last template
+    Wait Until Element Is Visible  //span[contains(text(),'Next')]
+    Click Element  //span[contains(text(),'Next')]
+    Wait Until Element Is Visible  //span[contains(text(),'Next')]
+    Click Element  //span[contains(text(),'Next')]
+     Wait Until Element Is Visible  //span[contains(text(),'Next')]
+    Click Element  //span[contains(text(),'Next')]
+    
+I fill data on all templates
+    I vote <state> on template  1
+    I write a message in AGILE <column>  Start  Don't skip offline meetings
+    I submit my <state1> and <state2> in TEAM_HEALTH_CHECK   Normal   Constant
+    I vote <state> on template  2
+
+I vote <state> on template
+    [Arguments]  ${state}
+    Sleep  2s
+    ${which_template}=  Get Element Count  (//span[@aria-label="like"])[1]
+    ${thc}=  Get Element Count   //span[contains(text(),'+')]
+    IF  "${which_template}" == "0"
+        I write a message in AGILE <column>  START  Norocele
+    ELSE IF  "${thc}" == "1"
+        I submit my <state1> and <state2> in TEAM_HEALTH_CHECK  Normal  Constant
+    ELSE
+        IF  "${state}" == "1"
+       Click Element  (//span[@aria-label="like"])[1]
+    ELSE IF  "${state}" == "2"
+       Click Element  (//span[@aria-label="like"])[2]
+    ELSE IF  "${state}" == "3"
+       Click Element  (//span[@aria-label="like"])[3]
+    ELSE IF  "${state}" == "4"
+       Click Element  (//span[@aria-label="like"])[4]
+       END
+       Sleep  1s
+       ${end}=  Get Element Count  //span[contains(text(),'End')]
+       IF  "${end}" == "1"
+              Click Element  //span[contains(text(),'End')]
+       ELSE  
+           Click Element  //span[contains(text(),'Next')]
+        END
+    END
+I write a message in AGILE <column>
+    [Arguments]  ${column}  ${message}
+    Sleep  2s
+    ${which_template}=  Get Element Count  (//span[@aria-label="like"])[1]
+    ${thc}=  Get Element Count   //span[contains(text(),'+')]
+    IF  "${which_template}" == "1"
+        I vote <state> on template  1
+    ELSE IF  "${thc}" == "1"
+        I submit my <state1> and <state2> in TEAM_HEALTH_CHECK  Normal  Constant
+    ELSE
+         ${id_column}=  Convert To Upper Case  ${column}
+        Wait Until Element Is Visible  //input[@id="${id_column}"]
+        Input Text  //input[@id="${id_column}"]  ${message}
+        IF  "${id_column}" == "START"
+            Click Element  (//span[@aria-label="send"])[1]
+        ELSE IF  "${id_column}" == "STOP"
+            Click Element  (//span[@aria-label="send"])[2]
+        ELSE IF  "${id_column}" == "CONTINUE"
+            Click Element  (//span[@aria-label="send"])[3]
+        END
+        Sleep  1s
+        ${end}=  Get Element Count  //span[contains(text(),'End')]
+        IF  "${end}" == "1"
+              Click Element  //span[contains(text(),'End')]
+        ELSE  
+           Click Element  //span[contains(text(),'Next')]
+        END
+    END
+
+I submit my <state1> and <state2> in TEAM_HEALTH_CHECK
+    [Arguments]  ${state1}  ${state2}
+    Switch Browser  1
+    Sleep  2s
+    ${which_template}=  Get Element Count  //span[contains(text(),'+')]
+    ${agile}=  Get Element Count  (//span[@aria-label="like"])[1]
+    IF  "${which_template}" == "0"
+         I vote <state> on template  2
+    ELSE IF  "${agile}" == "1"
+        I write a message in AGILE <column>  Start  Haide wai
+    ELSE 
+        Wait Until Element Is Visible  //span[contains(text(),'+')]
+        Click Element   //span[contains(text(),'+')]
+        Wait Until Element Is Visible  //button[contains(text(),'Normal')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Submit')]
+        Sleep  1s
+        ${end}=  Get Element Count  //span[contains(text(),'End')]
+        IF  "${end}" == "1"
+              manager clicks reveal results button
+              Click Element  //span[contains(text(),'End')]
+        ELSE  
+           Click Element  //span[contains(text(),'Next')]
+        END
+    END
+
+I am redirected to TEAM_HEALTH_CHECK template
+       Wait Until Element Is Visible  //td[contains(text(), 'TEAM HEALTH CRITERIA')]
+
+my votes are saved in the table
+       Wait Until Element Is Visible  (//div[@class="average-score_chart__IMOey"])[5]
+
+staff submits <state1> and <state2> in TEAM_HEALTH_CHECK
+     [Arguments]  ${state1}  ${state2}
+     Switch Browser  2
+     Wait Until Element Is Visible  //span[contains(text(),'+')]
+        Click Element   //span[contains(text(),'+')]
+        Wait Until Element Is Visible  //button[contains(text(),'Normal')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Submit')]
+    
+the voting results are updated in real life for both users
+    Switch Browser  2
+    Wait Until Element Is Visible  (//td)[18]
+
+I vote random 
+    ${list states}=     
+    Wait Until Element Is Visible  //span[contains(text(),'+')]
+        Click Element   //span[contains(text(),'+')]
+        Wait Until Element Is Visible  //button[contains(text(),'Normal')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Submit')]

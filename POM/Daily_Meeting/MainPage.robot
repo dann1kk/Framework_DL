@@ -60,6 +60,11 @@ I get redirected to the main page
     Wait Until Element Is Visible  //h1[contains(text(), 'Daily Stand-Up')]
 
 the created meeting is present 
+    Sleep  1s
+    ${meeting_on_1stpage}=  Get Element Count  //div[contains(text(), '${TITLE}')]
+    IF  "${meeting_on_1stpage}" == "0"
+        Click Element  //span[@aria-label="right"]
+    END
     Wait Until Element Is Visible   //div[contains(text(), '${TITLE}')]
 
 [Join] button is enabled
