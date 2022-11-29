@@ -238,6 +238,20 @@ a retro meeting with <templates> is created
     Then the Retro meeting is saved in the active tab
     And user is redirected to the active retro page
 
+a current retro meeting with <templates> is created
+    [Arguments]  ${template1}  ${template2}  ${template3}  ${template4} 
+    And I access retrospective page
+    When the user clicks [Create Retro] button
+    And the Retro meeting form is displayed
+    And I type <title> in the retro template name field
+    And the user ticks on the notes checkbox
+    And I drag <templates> in droppable area  ${template1}  ${template2}  ${template3}  ${template4} 
+    And I select Timer duration hours and minutes  02  45
+    And I choose date and time
+    And I click the [Create] button
+    Then the Retro meeting is saved in the active tab
+    And user is redirected to the active retro page
+
 I press 'X' button in the corner of the dropped <templates>
     ${nr_templates}=  Get Element Count  //span[@class="drag-template_removeTemplateBtn__UUQYu"]
     IF  "${nr_templates}" == "1"

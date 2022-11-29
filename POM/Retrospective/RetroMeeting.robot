@@ -8,6 +8,14 @@ ${criteria3}
 ${criteria4}
 ${criteria5}
 @{list_states}  Normal  
+${message1}
+${message2}
+${message3}
+${message4}
+${message5}
+${message6}
+${message7}  
+${message8} 
 
 *** Keywords ***
 
@@ -58,31 +66,40 @@ both users clicked on the notes button
     Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
     Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
 
-staff sends a few messages in notes 
+staff sends a few messages in notes
+
+  [Arguments]  ${message1}  ${message2}  ${message3}  ${message4}  ${message5}  ${message6}
+    Set Global Variable  ${message1}
+    Set Global Variable  ${message2}
+    Set Global Variable  ${message3}
+    Set Global Variable  ${message4}
+    Set Global Variable  ${message5}
+    Set Global Variable  ${message6}
+
     Wait Until Element Is Visible  //input[@id="message"]
     Sleep  1s
     Click Element  //input[@id="message"]  
-    Input Text  //input[@id="message"]  blabla
+    Input Text  //input[@id="message"]  ${message1}
 
     Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
     Click Element  //input[@id="message"]  
-    Input Text  //input[@id="message"]  blabla2
+    Input Text  //input[@id="message"]  ${message2}
     Sleep  1s
     Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
     Click Element  //input[@id="message"]  
-    Input Text  //input[@id="message"]  blabla3
+    Input Text  //input[@id="message"]  ${message3}
     Sleep  1s
     Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
     Click Element  //input[@id="message"]  
-    Input Text  //input[@id="message"]  blabla4
+    Input Text  //input[@id="message"]  ${message4}
     Sleep  1s
     Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
     Click Element  //input[@id="message"]  
-    Input Text  //input[@id="message"]  blabla5
+    Input Text  //input[@id="message"]  ${message5}
     Sleep  1s
     Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
     Click Element  //input[@id="message"]  
-    Input Text  //input[@id="message"]  blabla6
+    Input Text  //input[@id="message"]  ${message6}
     Sleep  1s
     Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
 
@@ -95,10 +112,12 @@ the messages are displayed in notes section for manager
     Wait Until Element Is Visible  //li[@class="chat_messageReceived__i8WCY"]
 
 staff clicked on the notes button
+    Switch Browser  2
     Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
     Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
 
 I clicked on the notes button
+    Switch Browser  1
     Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
     Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
 
@@ -141,6 +160,7 @@ the new criterias are saved and visible
     Wait Until Element Is Visible  //span[contains(text(), '${criteria5}')]
 
 I click End 
+    Switch Browser  1
     Wait Until Element Is Visible  //span[contains(text(),'End')]
     Click Element  //span[contains(text(),'End')]
 
@@ -346,3 +366,39 @@ I vote random
         Click Element  //button[contains(text(),'${state1}')]
         Click Element  //button[contains(text(),'${state2}')]
         Click Element  //button[contains(text(),'Submit')]
+
+the notes are displayed 
+  Wait Until Element Is Visible  //p[contains(text(), "${message1}")]
+  Wait Until Element Is Visible  //p[contains(text(), "${message2}")]
+  Wait Until Element Is Visible  //p[contains(text(), "${message3}")]
+  Wait Until Element Is Visible  //p[contains(text(), "${message4}")]
+  Wait Until Element Is Visible  //p[contains(text(), "${message5}")]
+  Wait Until Element Is Visible  //p[contains(text(), "${message6}")]
+  Wait Until Element Is Visible  //p[contains(text(), "${message7}")]
+  Wait Until Element Is Visible  //p[contains(text(), "${message8}")]
+
+the notes are in correct order
+  Element Text Should Be  (//p[@class="chat_textLine__G7BiS"])[1]  ${message1}
+  Element Text Should Be  (//p[@class="chat_textLine__G7BiS"])[2]  ${message2}
+  Element Text Should Be  (//p[@class="chat_textLine__G7BiS"])[3]  ${message3}
+  Element Text Should Be  (//p[@class="chat_textLine__G7BiS"])[4]  ${message4}
+  Element Text Should Be  (//p[@class="chat_textLine__G7BiS"])[5]  ${message5}
+  Element Text Should Be  (//p[@class="chat_textLine__G7BiS"])[6]  ${message6}
+  Element Text Should Be  (//p[@class="chat_textLine__G7BiS"])[7]  ${message7}
+  Element Text Should Be  (//p[@class="chat_textLine__G7BiS"])[8]  ${message8}
+
+I send a few messages
+  [Arguments]  ${message7}  ${message8} 
+    Set Global Variable  ${message7}
+    Set Global Variable  ${message8}
+
+    Wait Until Element Is Visible  //input[@id="message"]
+    Sleep  1s
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  ${message7}
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //input[@id="message"]  
+    Input Text  //input[@id="message"]  ${message8}
+    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Sleep  1s
+  

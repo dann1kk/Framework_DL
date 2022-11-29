@@ -371,4 +371,23 @@ Test Case - Participants name are saved anonymously in past retro when anonymous
     And I click on Past button
     And I open saved meeting in past retro
     Then all participants names are saved anonymously
-    
+
+Test Case - Check past Retrospective notes
+    Given I am logged in as Manager
+    And a current retro meeting with <templates> is created  ICE_BREAKING  -   -   - 
+    And I joined the retrospective meeting
+    And a staff user joined the same active retrospective meeting
+    And I started the meeting 
+    And staff clicked on the notes button 
+    And staff sends a few messages in notes  1  2  3  4  5  6  
+    And I clicked on the notes button
+    And I send a few messages  7  8
+    And I click End 
+    And I confirm that I want to end meeting
+    When I click on Past button
+    And I open saved meeting in past retro
+    And I clicked on the notes button 
+    Then the notes are displayed 
+    And the notes are in correct order
+
+ 
