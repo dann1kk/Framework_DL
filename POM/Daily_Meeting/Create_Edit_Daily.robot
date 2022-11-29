@@ -32,7 +32,7 @@ a daily stand-up meeting is created
     I press Create Daily-Meeting button 
     I type Daily-Meeting title
     I select Timer duration hours and minutes  01  15
-    I edit the Year, Month and Date  2022  Dec  27
+    I edit the Year, Month and Date  2022  Dec  25
     the user selects a later time than the current time
     I select Occurrence one-time  Monday
     I click the [Create] button

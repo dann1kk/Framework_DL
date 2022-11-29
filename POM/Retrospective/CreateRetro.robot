@@ -37,6 +37,7 @@ I type <title> in the retro template name field
     input text  //input[@placeholder="Retro meeting name"]  ${TITLE}
 
 I joined the retrospective meeting
+    Sleep  1s
     Wait Until Element Is Visible  (//div[.='${TITLE}']/parent::li//button)[1] 
     Click Element  (//div[.='${TITLE}']/parent::li//button)[1] 
 
@@ -125,6 +126,7 @@ I choose date and time
     # Click Element  //span[contains(text(), 'OK')]
 
 retrospective meeting is created
+    Sleep  2s
     ${meeting_on_1stpage}=  Get Element Count  //div[contains(text(), '${TITLE}')]
     IF  "${meeting_on_1stpage}" == "0"
         Click Element  //span[@aria-label="right"]
@@ -201,6 +203,25 @@ a retrospective meeting with notes is created
     I click the [Create] button
     the Retro meeting is saved in the active tab
     user is redirected to the active retro page
+
+the user ticks anonymous checkbox
+    Click Element  //input[@id="anonymous"]
+
+an anonymous retro meeting with <templates> is created
+    [Arguments]  ${template1}  ${template2}  ${template3}  ${template4}  ${year}  ${month}  ${date}
+    And I access retrospective page
+    When the user clicks [Create Retro] button
+    And the Retro meeting form is displayed
+    And I type <title> in the retro template name field
+    And the user ticks anonymous checkbox
+    And the user ticks on the notes checkbox
+    And I drag <templates> in droppable area  ${template1}  ${template2}  ${template3}  ${template4} 
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date   ${year}  ${month}  ${date}
+    And the user selects a later time than the current time
+    And I click the [Create] button
+    Then the Retro meeting is saved in the active tab
+    And user is redirected to the active retro page
 
 a retro meeting with <templates> is created
     [Arguments]  ${template1}  ${template2}  ${template3}  ${template4}  ${year}  ${month}  ${date}

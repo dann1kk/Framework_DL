@@ -172,6 +172,7 @@ the Notes window remains opened
     Wait Until Element Is Visible  //div[@id="messageList"]
 
 all participants can write messages in the Notes
+    Sleep  1s
     Wait Until Element Is Visible  //input[@id="message"]
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  blabla

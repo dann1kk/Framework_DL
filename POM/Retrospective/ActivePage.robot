@@ -5,9 +5,9 @@ Resource  ../POM/Log_In/LoggingIn.robot
 Resource  ../POM/Retrospective/CreateRetro.robot
 *** Keywords ***
 I access retrospective page
-    I press on project  21
-    wait until element is visible  //*[@id="root"]/section/aside/div/ul[1]/li[2]
-    click element  //*[@id="root"]/section/aside/div/ul[1]/li[2]
+    I press on project  22
+    wait until element is visible  //*[@id="root"]/section/aside/div/ul[1]/li[3]
+    click element  //*[@id="root"]/section/aside/div/ul[1]/li[3]
     Sleep  2s
     ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
     IF  "${popup_visible}" == "1"

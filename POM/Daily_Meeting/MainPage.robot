@@ -33,9 +33,9 @@ I joined the Daily meeting
     Click Element  (//span[contains(text(), 'Join')])[2]
     
 I click on logout button  
-    Scroll Element Into View  //span[@aria-label="logout"]
-    Wait Until Element Is Visible  //span[@aria-label="logout"]
-    Click Element  //span[@aria-label="logout"]
+    Scroll Element Into View  //li[@data-menu-id="rc-menu-uuid-14525-2-logout"]
+    Wait Until Element Is Visible  //li[@data-menu-id="rc-menu-uuid-14525-2-logout"]
+    Click Element  //li[@data-menu-id="rc-menu-uuid-14525-2-logout"]
     
 I am logged out and redirected to the main login page
      Wait Until Element Is Visible  id=basic_email
