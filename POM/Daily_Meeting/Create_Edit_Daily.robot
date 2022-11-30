@@ -27,6 +27,36 @@ I select Occurrence one-time
     Click Element  (//div[.='${day}'])[1]
     Click Element  //input[@placeholder="Event name"]
 
+a daily stand-up meeting without occurence is created 
+    [Arguments]  ${year}  ${month}  ${day}
+    And I am on Daily Stand-Up page
+    When I press Create Daily-Meeting button 
+    And I type Daily-Meeting title
+    And I select Timer duration hours and minutes  01  45
+    And the user selects date  ${year}  ${month}  ${day}
+    And the user selects a later time than the current time
+    And I click the [Create] button
+    Then the created meeting is present
+    ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
+    IF  "${popup_visible}" == "1"
+       Click Element  //span[@aria-label="close"]
+    END
+
+a future daily stand-up meeting without occurence is created 
+    [Arguments]  ${year}  ${month}  ${day}
+    And I am on Daily Stand-Up page
+    When I press Create Daily-Meeting button 
+    And I type Daily-Meeting title
+    And I select Timer duration hours and minutes  01  45
+    And the user selects date  ${year}  ${month}  ${day}
+    And the user selects a later time than the current time
+    And I click the [Create] button
+    Then the created meeting is present
+    ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
+    IF  "${popup_visible}" == "1"
+       Click Element  //span[@aria-label="close"]
+    END
+    
 a daily stand-up meeting is created 
     I am on Daily Stand-Up page
     I press Create Daily-Meeting button 
@@ -42,6 +72,11 @@ a daily stand-up meeting is created
        Click Element  //span[@aria-label="close"]
     END
 
+I select the current hour
+    Click Element  (//ul[@class="ant-picker-time-panel-column"])[1]//li[@class="ant-picker-time-panel-cell ant-picker-time-panel-cell-selected"][1]
+
+minute options are displayed only for the minutes left of this hour
+    Wait Until Element Is Visible  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell ant-picker-time-panel-cell-selected"][1]
 
 a daily stand-up meeting is created for today
     I am on Daily Stand-Up page
@@ -107,3 +142,28 @@ a standup meeting with Notes is created
     And I select Occurrence one-time  ${occurence}
     And I click the [Create] button
     Then the created meeting is present
+
+I select current time
+    Wait Until Element Is Visible  //input[@id='time']   
+    click element  //input[@id='time']    
+    click element  //a[contains(text(), 'Now')]
+
+I click on [Time] field
+    Wait Until Element Is Visible  //input[@id='time'] 
+    click element  //input[@id='time'] 
+
+all hour options are displayed and clickable
+    Click element  (//ul[@class="ant-picker-time-panel-column"])[1]//li[@class="ant-picker-time-panel-cell"][3]
+
+all minute options are displayed and clickable
+    Click element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+
+I remove occurence
+    Wait Until Element Is Visible  //span[@class="ant-select-selection-item-remove"]
+    Click Element  //span[@class="ant-select-selection-item-remove"]
+
+I select +1 hour
+    Wait Until Element Is Visible  (//ul[@class="ant-picker-time-panel-column"])[1]//li[@class="ant-picker-time-panel-cell"][1]
+
+the Time input is removed
+    Wait Until Element Is Visible  //input[@title=""]  #locator for empty text in field

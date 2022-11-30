@@ -23,9 +23,9 @@ ${templates_page}  https://app-toolkit-frontend-qa.azurewebsites.net/project/7/r
 #give today date
 ${year}  2022
 ${month}  Nov
-${day}   29
+${day}   30
 #set as today
-${occurence}   Monday
+${occurence}   Tuesday
 *** Test Cases ***
 Test Case - Display active retros in Active tab
     Given I am logged in as Manager
@@ -173,7 +173,7 @@ Test Case - Check if users receive notifications when notes window is opened
     And I joined the retrospective meeting
     And a staff user joined the same active retrospective meeting
     And both users clicked on the notes button 
-    When staff sends a few messages in notes 
+    When staff sends a few messages in notes  1  2  3  4  5  6 
     Then the messages are displayed in notes section for manager
     And a new message notification is visible
 
@@ -183,7 +183,7 @@ Test Case - Check if users receive notifications when notes window is closed
     And I joined the retrospective meeting
     And a staff user joined the same active retrospective meeting
     And staff clicked on the notes button
-    When staff sends a few messages in notes 
+    When staff sends a few messages in notes  1  2  3  4  5  6  
     Then manager receives message notification
 
 Test Case - Create Retrospective with particular templates
@@ -353,7 +353,21 @@ Test Case - Check the voted states in the ice_breaking template in the past retr
     And I joined the retrospective meeting
     And I started the meeting
     # states come from left to right 1,2,3,4
-    When I vote <state> on template  1  
+    When I vote <state> on template  1 
+    And I click End
+    And I confirm that I want to end meeting
+    And I click on Past button
+    And I open saved meeting in past retro
+    Then voted state is saved the past retro meeting
+
+Test Case - Check the voted states in the event_ending template in the past retro meeting
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  EVENT_ENDING  -   -   -  ${year}  ${month}  ${day}
+    And I joined the retrospective meeting
+    And I started the meeting
+    # states come from left to right 1,2,3,4
+    When I vote <state> on template  1 
+    And I click End
     And I confirm that I want to end meeting
     And I click on Past button
     And I open saved meeting in past retro
@@ -390,4 +404,277 @@ Test Case - Check past Retrospective notes
     Then the notes are displayed 
     And the notes are in correct order
 
- 
+Test Case - Cancel Manager's vote in Event-Ending template
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  EVENT_ENDING  -   -   -  ${year}  ${month}  ${day}
+    And I joined the retrospective meeting
+    And I started the meeting
+    # states come from left to right 1,2,3,4
+    When I vote <state> on template  1  
+    And I vote <state> on template  1
+    Then my vote is canceled 
+
+Test Case - Cancel Manager's vote in ICE_BREAKING template
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  ICE_BREAKING  -   -   -  ${year}  ${month}  ${day}
+    And I joined the retrospective meeting
+    And I started the meeting
+    # states come from left to right 1,2,3,4
+    When I vote <state> on template  1  
+    And I vote <state> on template  1
+    Then my vote is canceled 
+
+Test Case - Edit time options| Recurring Daily starting Today
+    Given I am logged in as Manager
+    And a standup meeting with Notes is created   ${year}  ${month}  ${day}  ${occurence}
+    And I click [Edit] button
+    When I click on [Time] field
+    Then all hour options are displayed and clickable
+    And all minute options are displayed and clickable
+
+Test Case - Edit time future| Recurring Daily starting Today
+    Given I am logged in as Manager
+    And a standup meeting with Notes is created   ${year}  ${month}  ${day}  ${occurence}
+    And I click [Edit] button
+    When the user selects a later time than the current time
+    And I click [Update]
+    Then the updated meeting is present
+
+ Test Case - Edit time NOW| Recurring Daily starting Today
+    Given I am logged in as Manager
+    And a standup meeting with Notes is created   ${year}  ${month}  ${day}  ${occurence}
+    And I click [Edit] button
+    When I select current time
+    And I click [Update]
+    Then the updated meeting is present
+
+Test Case - Edit time NOW & remove occurrence| Recurring Daily starting Today
+    Given I am logged in as Manager
+    And a standup meeting with Notes is created   ${year}  ${month}  ${day}  ${occurence}
+    And I click [Edit] button
+    When I remove occurence
+    And I click [Update]
+    Then the updated meeting is present
+
+Test Case - Edit time future & remove occurrence| Recurring Daily starting Today
+    Given I am logged in as Manager
+    And a standup meeting with Notes is created    ${year}  ${month}  ${day}  ${occurence}
+    And I click [Edit] button
+    When the user selects a later time than the current time
+    And I remove occurence
+    And I click [Update]
+    Then the updated meeting is present
+
+Test Case - Edit time current hour | One time Daily starting Today time options
+    Given I am logged in as Manager
+    And a daily stand-up meeting without occurence is created     ${year}  ${month}  ${day} 
+    And I click [Edit] button
+    When I click on [Time] field
+    And I select the current hour
+    Then minute options are displayed only for the minutes left of this hour
+
+Test Case - Edit time NOW | One time Daily starting Today
+    Given I am logged in as Manager
+    And a daily stand-up meeting without occurence is created     ${year}  ${month}  ${day}
+    And I click [Edit] button
+    When I select current time
+    And I click [Update]
+    Then the updated meeting is present
+
+Test Case - Edit time future hour | One time Daily starting Today time options
+    Given I am logged in as Manager
+    And a daily stand-up meeting without occurence is created   ${year}  ${month}  ${day} 
+    And I click [Edit] button
+    When I click on [Time] field
+    And I select +1 hour
+    Then all minute options are displayed and clickable
+
+Test Case - Edit time future | One time Daily starting Today
+    Given I am logged in as Manager
+    And a daily stand-up meeting without occurence is created   ${year}  ${month}  ${day} 
+    And I click [Edit] button
+    When the user selects a later time than the current time
+    And I click [Update] 
+    Then the updated meeting is present
+
+Test Case - Edit time future| Recurring Daily starting in Future
+    Given I am logged in as Manager
+    And a daily stand-up meeting is created  #keyword for future meeting, aka default 25 dec
+    And I click [Edit] button
+    When the user selects a later time than the current time
+    And I click [Update] 
+    Then the updated meeting is present
+
+Test Case - Edit time past| Recurring Daily starting in Future
+    Given I am logged in as Manager
+    And a daily stand-up meeting is created  #keyword for future meeting, aka default 25 dec
+    And I click [Edit] button
+    When I select a time in the past
+    And I click [Update] 
+    Then the updated meeting is present
+
+Test Case - Edit time NOW| Recurring Daily starting in Future
+    Given I am logged in as Manager
+    And a daily stand-up meeting is created  #keyword for future meeting, aka default 25 dec
+    And I click [Edit] button
+    When I select current time
+    And I click [Update] 
+    Then the updated meeting is present
+
+Test Case - Edit time future| One time Daily starting in Future
+    Given I am logged in as Manager
+    And a future daily stand-up meeting without occurence is created   2022  Dec  25 
+    And I click [Edit] button
+    When the user selects a later time than the current time
+    And I click [Update] 
+    Then the updated meeting is present
+
+Test Case - Edit time past| One time Daily starting in Future
+    Given I am logged in as Manager
+    And a future daily stand-up meeting without occurence is created   2022  Dec  25 
+    And I click [Edit] button
+    When I select a time in the past
+    And I click [Update] 
+    Then the updated meeting is present
+
+Test Case - Edit time NOW| One time Daily starting in Future
+    Given I am logged in as Manager
+    And a future daily stand-up meeting without occurence is created   2022  Dec  25 
+    And I click [Edit] button
+    When I select current time
+    And I click [Update] 
+    Then the updated meeting is present
+
+Test Case - Create Stand-Up TIME| Today and Now
+    Given I am logged in as Manager
+    And I am on Daily Stand-Up page
+    When I press Create Daily-Meeting button 
+    And I type Daily-Meeting title
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  ${year}  ${month}  ${day}
+    And I select current time
+    And I select Occurrence one-time  ${occurence}
+    And I click the [Create] button
+    Then the created meeting is present
+
+Test Case - Create Stand-Up TIME| Select past time before current date
+    Given I am logged in as Manager
+    And I am on Daily Stand-Up page
+    When I press Create Daily-Meeting button 
+    And I type Daily-Meeting title
+    And I select Timer duration hours and minutes  02  45
+    And I select a time in the past
+    And the user selects date  ${year}  ${month}  ${day}
+    Then the Time input is removed
+
+Test Case - Create Stand-Up TIME| Today and future time
+    Given I am logged in as Manager
+    And I am on Daily Stand-Up page
+    When I press Create Daily-Meeting button 
+    And I type Daily-Meeting title
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  ${year}  ${month}  ${day}
+    And the user selects a later time than the current time
+    And I select Occurrence one-time  ${occurence}
+    And I click the [Create] button
+    Then the created meeting is present
+
+Test Case - Create Stand-Up TIME| Future date time options
+    Given I am logged in as Manager
+    And I am on Daily Stand-Up page
+    When I press Create Daily-Meeting button 
+    And I type Daily-Meeting title
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  2022  Dec  25   
+    When I click on [Time] field
+    Then all hour options are displayed and clickable
+    And all minute options are displayed and clickable
+
+Test Case - Create Stand-Up TIME| Future date and any time
+    Given I am logged in as Manager
+    And I am on Daily Stand-Up page
+    When I press Create Daily-Meeting button 
+    And I type Daily-Meeting title
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  2022  Dec  25   
+    And the user selects a later time than the current time
+    And I select Occurrence one-time  ${occurence}
+    And I click the [Create] button
+    Then the created meeting is present
+
+Test Case - Create Retro Meeting TIME| Today and Now
+    Given I am logged in as Manager
+    And I access retrospective page
+    When the user clicks [Create Retro] button
+    And the Retro meeting form is displayed
+    And I type <title> in the retro template name field
+    And the user ticks on the notes checkbox
+    And I drag and drop all templates
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  ${year}  ${month}  ${day}
+    And I select current time
+    And I click the [Create] button
+    Then the Retro meeting is saved in the active tab
+    And user is redirected to the active retro page
+
+Test Case - Create Retro Meeting TIME| Select past time before current date
+    Given I am logged in as Manager
+    And I access retrospective page
+    When the user clicks [Create Retro] button
+    And the Retro meeting form is displayed
+    And I type <title> in the retro template name field
+    And the user ticks on the notes checkbox
+    And I drag and drop all templates
+    And I select Timer duration hours and minutes  02  45
+    And I select a time in the past
+    And the user selects date  ${year}  ${month}  ${day}
+    Then the Time input is removed
+
+Test Case - Create Retro Meeting TIME| Today and future time
+    Given I am logged in as Manager
+    And I access retrospective page
+    When the user clicks [Create Retro] button
+    And the Retro meeting form is displayed
+    And I type <title> in the retro template name field
+    And the user ticks on the notes checkbox
+    And I drag and drop all templates
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  ${year}  ${month}  ${day}
+    And the user selects a later time than the current time
+    And I click the [Create] button
+    Then the Retro meeting is saved in the active tab
+    And user is redirected to the active retro page
+
+Test Case - Create Retro Meeting TIME| Future date time options
+    Given I am logged in as Manager
+    And I access retrospective page
+    When the user clicks [Create Retro] button
+    And the Retro meeting form is displayed
+    And I type <title> in the retro template name field
+    And the user ticks on the notes checkbox
+    And I drag and drop all templates
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  2022  Dec  25   
+    When I click on [Time] field
+    Then all hour options are displayed and clickable
+    And all minute options are displayed and clickable
+
+Test Case - Create Retro Meeting TIME| Future date and any time
+    Given I am logged in as Manager
+    And I access retrospective page
+    When the user clicks [Create Retro] button
+    And the Retro meeting form is displayed
+    And I type <title> in the retro template name field
+    And the user ticks on the notes checkbox
+    And I drag and drop all templates
+    And I select Timer duration hours and minutes  02  45
+    And the user selects date  2022  Dec  25   
+    And the user selects a later time than the current time
+    And I click the [Create] button
+    Then the created meeting is present
+
+Test Case - Writing and sending messages in an active Daily Stand-Up Notes
+
+Test Case - Voting average for default criteria
+
+Test Case - Reveal Results after closing the window

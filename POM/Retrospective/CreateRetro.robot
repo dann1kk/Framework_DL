@@ -17,6 +17,7 @@ I drag and drop all templates
     Sleep  1s 
     Drag And Drop  //div[contains(text(), 'TEAM_HEALTH_CHECK')]  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/p[1]
     Sleep  1s
+    Execute Javascript  window.scrollTo(112, 150)
     Drag And Drop  //div[contains(text(), 'EVENT_ENDING')]  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/p[1]
     Sleep  1s 
 
@@ -58,9 +59,14 @@ the user selects date
 
     Click Element  //button[@class='ant-picker-month-btn']
     Click Element  //div[@class='ant-picker-cell-inner'][.='${month}']
-    Click Element  //div[@class='ant-picker-cell-inner'][.='${date}']
-
+    ${Date_twice}=  Get Element Count  //div[@class='ant-picker-cell-inner'][.='${date}']
+    IF  "${Date_twice}" == "2"
+        Click Element  (//div[@class='ant-picker-cell-inner'][.='${date}'])[2]
+    ELSE
+        Click Element  //div[@class='ant-picker-cell-inner'][.='${date}']
+    END
 the user selects a later time than the current time
+    Wait Until Element Is Visible  //input[@id='time']
     click element  //input[@id='time']    
     click element  //a[contains(text(), 'Now')]
     Click Element  //input[@id='time']
@@ -76,8 +82,16 @@ I click the [Create] button
     Execute Javascript  window.scrollTo(113, 754)
     click element  //button[@type='submit']
 
+I select a time in the past
+    Wait Until Element Is Visible  //input[@id='time']
+    click element  //input[@id='time']    
+    click element  //a[contains(text(), 'Now')]
+    Click Element  //input[@id='time']
+    Click Element  (//ul[@class="ant-picker-time-panel-column"])[1]//li[@class="ant-picker-time-panel-cell"][1]
+    Click Element  //span[contains(text(), 'OK')]
+    
 the Retro meeting is saved in the active tab
-    Sleep  1s
+    Sleep  2s
     ${meeting_on_1stpage}=  Get Element Count  //div[contains(text(), '${TITLE}')]
     IF  "${meeting_on_1stpage}" == "0"
         Click Element  //span[@aria-label="right"]
@@ -141,7 +155,7 @@ I drag <templates> in droppable area
         Drag And Drop  //div[contains(text(), 'AGILE')]   //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/p[1]
         Sleep  1s 
     ELSE IF  "${template1}" == "EVENT_ENDING"
-        Drag And Drop  //div[contains(text(), 'EVENT_ENDING')]   //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[3]/div/div
+        Drag And Drop  //div[contains(text(), 'EVENT_ENDING')]   //span[contains(text(), 'Notes')]
         Sleep  1s 
     ELSE IF  "${template1}" == "TEAM_HEALTH_CHECK"
         Drag And Drop  //div[contains(text(), 'TEAM_HEALTH_CHECK')]   //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[3]/div/div

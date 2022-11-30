@@ -20,7 +20,6 @@ I am on Daily Stand-Up page
 I press log out button on the left side panel
     I press on project  1
     Wait Until Element Is Visible  //h1[contains(text(), 'Daily Stand-Up')] 
-    Execute Javascript  window.scrollTo(1536, 739)
     I click on logout button
 
 I joined the Daily meeting 
@@ -33,9 +32,10 @@ I joined the Daily meeting
     Click Element  (//span[contains(text(), 'Join')])[2]
     
 I click on logout button  
-    Scroll Element Into View  //li[@data-menu-id="rc-menu-uuid-14525-2-logout"]
-    Wait Until Element Is Visible  //li[@data-menu-id="rc-menu-uuid-14525-2-logout"]
-    Click Element  //li[@data-menu-id="rc-menu-uuid-14525-2-logout"]
+    Sleep  1s
+    Execute Javascript  window.scrollTo(812, 950)
+    #Wait Until Element Is Visible  //span[contains(text(), 'Log out')]
+    Click Element  //span[contains(text(), 'Log out')]
     
 I am logged out and redirected to the main login page
      Wait Until Element Is Visible  id=basic_email

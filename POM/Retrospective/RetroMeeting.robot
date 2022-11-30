@@ -215,9 +215,12 @@ I moved to the last template
     
 I fill data on all templates
     I vote <state> on template  1
+    I moved to the next template 
     I write a message in AGILE <column>  Start  Don't skip offline meetings
     I submit my <state1> and <state2> in TEAM_HEALTH_CHECK   Normal   Constant
+    I moved to the next template
     I vote <state> on template  2
+    I click End
 
 I vote <state> on template
     [Arguments]  ${state}
@@ -239,12 +242,12 @@ I vote <state> on template
        Click Element  (//span[@aria-label="like"])[4]
        END
        Sleep  1s
-       ${end}=  Get Element Count  //span[contains(text(),'End')]
-       IF  "${end}" == "1"
-              Click Element  //span[contains(text(),'End')]
-       ELSE  
-           Click Element  //span[contains(text(),'Next')]
-        END
+    #    ${end}=  Get Element Count  //span[contains(text(),'End')]
+    #    IF  "${end}" == "1"
+    #           Click Element  //span[contains(text(),'End')]
+    #    ELSE  
+    #        Click Element  //span[contains(text(),'Next')]
+    #     END
     END
 I write a message in AGILE <column>
     [Arguments]  ${column}  ${message}
@@ -346,26 +349,26 @@ the voting results are updated in real life for both users
     Switch Browser  2
     Wait Until Element Is Visible  (//td)[18]
 
-I vote random 
-    ${list states}=     
-    Wait Until Element Is Visible  //span[contains(text(),'+')]
-        Click Element   //span[contains(text(),'+')]
-        Wait Until Element Is Visible  //button[contains(text(),'Normal')]
-        Click Element  //button[contains(text(),'${state1}')]
-        Click Element  //button[contains(text(),'${state2}')]
-        Click Element  //button[contains(text(),'Next')]
-        Click Element  //button[contains(text(),'${state1}')]
-        Click Element  //button[contains(text(),'${state2}')]
-        Click Element  //button[contains(text(),'Next')]
-        Click Element  //button[contains(text(),'${state1}')]
-        Click Element  //button[contains(text(),'${state2}')]
-        Click Element  //button[contains(text(),'Next')]
-        Click Element  //button[contains(text(),'${state1}')]
-        Click Element  //button[contains(text(),'${state2}')]
-        Click Element  //button[contains(text(),'Next')]
-        Click Element  //button[contains(text(),'${state1}')]
-        Click Element  //button[contains(text(),'${state2}')]
-        Click Element  //button[contains(text(),'Submit')]
+# I vote random 
+#     ${list states}=  put all states and choose random between them  // to do later 
+#     Wait Until Element Is Visible  //span[contains(text(),'+')]
+#         Click Element   //span[contains(text(),'+')]
+#         Wait Until Element Is Visible  //button[contains(text(),'Normal')]
+#         Click Element  //button[contains(text(),'${state1}')]
+#         Click Element  //button[contains(text(),'${state2}')]
+#         Click Element  //button[contains(text(),'Next')]
+#         Click Element  //button[contains(text(),'${state1}')]
+#         Click Element  //button[contains(text(),'${state2}')]
+#         Click Element  //button[contains(text(),'Next')]
+#         Click Element  //button[contains(text(),'${state1}')]
+#         Click Element  //button[contains(text(),'${state2}')]
+#         Click Element  //button[contains(text(),'Next')]
+#         Click Element  //button[contains(text(),'${state1}')]
+#         Click Element  //button[contains(text(),'${state2}')]
+#         Click Element  //button[contains(text(),'Next')]
+#         Click Element  //button[contains(text(),'${state1}')]
+#         Click Element  //button[contains(text(),'${state2}')]
+#         Click Element  //button[contains(text(),'Submit')]
 
 the notes are displayed 
   Wait Until Element Is Visible  //p[contains(text(), "${message1}")]
@@ -401,4 +404,7 @@ I send a few messages
     Input Text  //input[@id="message"]  ${message8}
     Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
     Sleep  1s
+
+my vote is canceled 
+    Wait Until Element Is Visible  (//span[contains(text(), '0')])[4]
   
