@@ -7,7 +7,6 @@ ${criteria2}
 ${criteria3}
 ${criteria4}
 ${criteria5}
-@{list_states}  Normal  
 ${message1}
 ${message2}
 ${message3}
@@ -16,6 +15,8 @@ ${message5}
 ${message6}
 ${message7}  
 ${message8} 
+${state1}
+${state2}
 
 *** Keywords ***
 
@@ -25,6 +26,7 @@ I am on TEAM_HEALTH_CHECK
     Maximize Browser Window
      
 manager clicks reveal results button
+    Switch Browser  1
     Wait Until Element Is Visible  //span[contains(text(), 'Reveal')]
     Click Element  //span[contains(text(), 'Reveal')]
 
@@ -323,9 +325,35 @@ I am redirected to TEAM_HEALTH_CHECK template
 my votes are saved in the table
        Wait Until Element Is Visible  (//div[@class="average-score_chart__IMOey"])[5]
 
+staff submits <state1> and <state2> on first page in TEAM_HEALTH_CHECK voting modal
+    [Arguments]  ${state1}  ${state2}
+     Switch Browser  2
+     Wait Until Element Is Visible  //span[contains(text(),'+')]
+        Click Element   //span[contains(text(),'+')]
+        Wait Until Element Is Visible  //button[contains(text(),'Normal')]
+        Click Element  //button[contains(text(),'${state1}')]
+        Click Element  //button[contains(text(),'${state2}')]
+        Click Element  //button[contains(text(),'Next')]
+
+staff closes the voting modal
+    Sleep  1s
+    Click Element  //div[contains(text(), 'X')]
+
+staff doesn't see any results in "You" collumn
+    Switch Browser  2
+    IF  "${state1}" == "Good"
+        Wait Until Element Is Not Visible  //span[contains(text(), 'G')]
+    ELSE IF  "${state1}" == "Normal"
+        Wait Until Element Is Not Visible  //span[contains(text(), 'Y')]
+    ELSE IF  "${state1}" == "Bad"
+        Wait Until Element Is Not Visible  //span[contains(text(), 'B')]
+    END
+    
 staff submits <state1> and <state2> in TEAM_HEALTH_CHECK
      [Arguments]  ${state1}  ${state2}
      Switch Browser  2
+     Set Global Variable  ${state1}
+     Set Global Variable  ${state2}
      Wait Until Element Is Visible  //span[contains(text(),'+')]
         Click Element   //span[contains(text(),'+')]
         Wait Until Element Is Visible  //button[contains(text(),'Normal')]
@@ -408,3 +436,27 @@ I send a few messages
 my vote is canceled 
     Wait Until Element Is Visible  (//span[contains(text(), '0')])[4]
   
+only manager user sees an Average score for each criteria
+    Switch Browser  1
+    Wait Until Element Is Visible  (//div[@class="average-score_chart__IMOey"])[5]
+    Switch Browser  2
+    Wait Until Element Is Not Visible  (//div[@class="average-score_chart__IMOey"])[5]
+
+the score matches the votes
+    Switch Browser  1
+    ${score}=  Get Text  (//div[@class="average-score_chart__IMOey"])[5]
+    IF  "${state1}" == "Normal"
+        Should Be Equal  ${score}  2/3
+    ELSE IF  "${state1}" == "Bad"
+        Should Be Equal  ${score}  1/3
+    ELSE IF  "${state1}" == "Good"
+        Should Be Equal  ${score}  3/3  
+    END
+
+And the score is displayed on the far-right side of each criteria
+    Wait Until Element Is Visible  (//td)[8]//div[@class="average-score_chart__IMOey"]
+    Wait Until Element Is Visible  (//td)[11]//div[@class="average-score_chart__IMOey"]
+    Wait Until Element Is Visible  (//td)[14]//div[@class="average-score_chart__IMOey"]
+    Wait Until Element Is Visible  (//td)[17]//div[@class="average-score_chart__IMOey"]
+    Wait Until Element Is Visible  (//td)[20]//div[@class="average-score_chart__IMOey"]
+        

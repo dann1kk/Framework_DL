@@ -22,8 +22,8 @@ Test Teardown  End Test
 ${templates_page}  https://app-toolkit-frontend-qa.azurewebsites.net/project/7/retro?tab=templates
 #give today date
 ${year}  2022
-${month}  Nov
-${day}   30
+${month}  Dec
+${day}   1
 #set as today
 ${occurence}   Tuesday
 *** Test Cases ***
@@ -344,7 +344,7 @@ Test Case - Voting results are updated in real-life
     And a staff user joined the same active retrospective meeting
     And I started the meeting
     When staff submits <state1> and <state2> in TEAM_HEALTH_CHECK  Normal  Constant
-    When I submit my <state1> and <state2> in TEAM_HEALTH_CHECK   Normal   Constant
+    And I submit my <state1> and <state2> in TEAM_HEALTH_CHECK   Normal   Constant
     Then the voting results are updated in real life for both users
 
 Test Case - Check the voted states in the ice_breaking template in the past retro meeting
@@ -673,8 +673,24 @@ Test Case - Create Retro Meeting TIME| Future date and any time
     And I click the [Create] button
     Then the created meeting is present
 
-Test Case - Writing and sending messages in an active Daily Stand-Up Notes
-
 Test Case - Voting average for default criteria
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  ${year}  ${month}  ${day}
+    And I joined the retrospective meeting
+    And a staff user joined the same active retrospective meeting
+    And I started the meeting
+    When staff submits <state1> and <state2> in TEAM_HEALTH_CHECK  Bad  Constant
+    Then only manager user sees an Average score for each criteria
+    And the score matches the votes
+    And the score is displayed on the far-right side of each criteria
 
 Test Case - Reveal Results after closing the window
+    Given I am logged in as Manager
+    And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -  ${year}  ${month}  ${day}
+    And I joined the retrospective meeting
+    And a staff user joined the same active retrospective meeting
+    And I started the meeting
+    When staff submits <state1> and <state2> on first page in TEAM_HEALTH_CHECK voting modal  Bad  Constant 
+    And staff closes the voting modal
+    And manager clicks reveal results button 
+    Then staff doesn't see any results in "You" collumn

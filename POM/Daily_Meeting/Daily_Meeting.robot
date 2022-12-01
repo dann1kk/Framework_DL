@@ -28,6 +28,10 @@ the standup meeting has Notes integrated
     Wait Until Element Is Visible  //input[@class="ant-input"]
     input text   //input[@class="ant-input"]    ${SPACE}
 
+@user writes a message in the Notes
+    Wait Until Element Is Visible  //input[@class="ant-input"]
+    input text   //input[@class="ant-input"]    Howdy
+
 @user tries to send the message
     click element  //span[@aria-label='send']
 

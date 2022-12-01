@@ -59,12 +59,12 @@ the user selects date
 
     Click Element  //button[@class='ant-picker-month-btn']
     Click Element  //div[@class='ant-picker-cell-inner'][.='${month}']
-    ${Date_twice}=  Get Element Count  //div[@class='ant-picker-cell-inner'][.='${date}']
-    IF  "${Date_twice}" == "2"
-        Click Element  (//div[@class='ant-picker-cell-inner'][.='${date}'])[2]
-    ELSE
+    # ${Date_twice}=  Get Element Count  //div[@class='ant-picker-cell-inner'][.='${date}']
+    # IF  "${Date_twice}" == "2"
+    #     Click Element  (//div[@class='ant-picker-cell-inner'][.='${date}'])[2]
+    # ELSE
         Click Element  //div[@class='ant-picker-cell-inner'][.='${date}']
-    END
+    #END
 the user selects a later time than the current time
     Wait Until Element Is Visible  //input[@id='time']
     click element  //input[@id='time']    
