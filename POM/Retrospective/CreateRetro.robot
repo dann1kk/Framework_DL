@@ -10,7 +10,7 @@ Resource  ../POM/Daily_Meeting/Create_Edit_Daily.robot
 
 *** Keywords ***
 I drag and drop all templates
-    Wait Until Element Is Visible  //h1[contains(text(), 'Create new Retro meeting')]
+    Wait Until Element Is Visible  //h1[contains(text(), 'Create')]
     Drag And Drop  //div[contains(text(), 'ICE_BREAKING')]  //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]
     Sleep  1s
     Drag And Drop  //div[contains(text(), 'AGILE')]   //*[@id="root"]/section/section/main/div[2]/form/div/div[1]/div[4]/p[1]
@@ -32,15 +32,71 @@ the Create meeting form is displayed
     wait until element is visible  //h1[contains(text(), 'Create new')]
 
 I type <title> in the retro template name field
+    Wait Until Element Is Visible  //input[@placeholder="Retro template name"]
+    ${TITLE}=  Generate Random String  10  [LETTERS]
+    Set Global Variable  ${TITLE} 
+    input text  //input[@placeholder="Retro template name"]  ${TITLE}
+
+I type <title> in the retro meeting name field
     Wait Until Element Is Visible  //input[@placeholder="Retro meeting name"]
     ${TITLE}=  Generate Random String  10  [LETTERS]
     Set Global Variable  ${TITLE} 
     input text  //input[@placeholder="Retro meeting name"]  ${TITLE}
 
 I joined the retrospective meeting
-    Sleep  1s
-    Wait Until Element Is Visible  (//div[.='${TITLE}']/parent::li//button)[1] 
-    Click Element  (//div[.='${TITLE}']/parent::li//button)[1] 
+    Sleep  5s
+    Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+    IF  "${IsElementVisible}" == "False"
+        Click Element  //span[@aria-label="right"]
+        Sleep  5s
+        Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible1}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+        IF  "${IsElementVisible1}" == "False"
+            Wait Until Element is Visible  //span[@aria-label="right"]
+            Click Element  //span[@aria-label="right"]
+            Sleep  5s
+            Wait Until Element Is Visible  //span[@aria-label="right"]
+            ${IsElementVisible2}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+            IF  "${IsElementVisible2}" == "False"
+                Wait Until Element is Visible  //span[@aria-label="right"]
+                Click Element  //span[@aria-label="right"]
+                Sleep  5s
+                Wait Until Element Is Visible  //span[@aria-label="right"]
+                ${IsElementVisible3}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                IF  "${IsElementVisible3}" == "False"
+                    Wait Until Element is Visible  //span[@aria-label="right"]
+                    Click Element  //span[@aria-label="right"]
+                    Sleep  5s
+                    Wait Until Element Is Visible  //span[@aria-label="right"]
+                    ${IsElementVisible4}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                        IF  "${IsElementVisible4}" == "False"
+                        Wait Until Element is Visible  //span[@aria-label="right"]
+                        Click Element  //span[@aria-label="right"]
+                            Sleep  5s
+                            Wait Until Element Is Visible  //span[@aria-label="right"]
+                            ${IsElementVisible5}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                            IF  "${IsElementVisible5}" == "False"
+                            Wait Until Element is Visible  //span[@aria-label="right"]
+                            Click Element  //span[@aria-label="right"]
+                            ELSE    
+                                Click Element  (//div[.='${TITLE}']/parent::li//button)[1] 
+                            END
+                        ELSE
+                        Click Element  (//div[.='${TITLE}']/parent::li//button)[1] 
+                        END
+                ELSE
+                    Click Element  (//div[.='${TITLE}']/parent::li//button)[1] 
+                END
+            ELSE 
+            Click Element  (//div[.='${TITLE}']/parent::li//button)[1] 
+            END
+        ELSE  
+            Click Element  (//div[.='${TITLE}']/parent::li//button)[1] 
+        END
+    ELSE 
+        Click Element  (//div[.='${TITLE}']/parent::li//button)[1] 
+    END
 
 the user ticks on the notes checkbox
     click element  //input[@id="notes"]
@@ -65,6 +121,7 @@ the user selects date
     # ELSE
         Click Element  //div[@class='ant-picker-cell-inner'][.='${date}']
     #END
+    
 the user selects a later time than the current time
     Wait Until Element Is Visible  //input[@id='time']
     click element  //input[@id='time']    
@@ -92,10 +149,54 @@ I select a time in the past
     
 the Retro meeting is saved in the active tab
     Sleep  2s
-    ${meeting_on_1stpage}=  Get Element Count  //div[contains(text(), '${TITLE}')]
-    IF  "${meeting_on_1stpage}" == "0"
+    Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+    IF  "${IsElementVisible}" == "False"
         Click Element  //span[@aria-label="right"]
+        Sleep  2s
+        Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible1}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+        IF  "${IsElementVisible1}" == "False"
+            Click Element  //span[@aria-label="right"]
+            Sleep  2s
+            Wait Until Element Is Visible  //span[@aria-label="right"]
+            ${IsElementVisible2}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+            IF  "${IsElementVisible2}" == "False"
+                Click Element  //span[@aria-label="right"]
+                Sleep  2s
+                ${IsElementVisible3}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                IF  "${IsElementVisible3}" == "False"
+                    Click Element  //span[@aria-label="right"]
+                    Sleep  2s
+                    Wait Until Element Is Visible  //span[@aria-label="right"]
+                    ${IsElementVisible4}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                        IF  "${IsElementVisible4}" == "False"
+                        Click Element  //span[@aria-label="right"]
+                            Sleep  2s
+                            Wait Until Element Is Visible  //span[@aria-label="right"]
+                            ${IsElementVisible5}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                            IF  "${IsElementVisible5}" == "False"
+                            Click Element  //span[@aria-label="right"]
+                            ELSE
+                                Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]  
+                            END
+                        ELSE
+                         Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]  
+                        END
+                ELSE
+                     Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]  
+                END
+            ELSE 
+             Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]   
+            END
+        ELSE  
+             Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]   
+        END
+    ELSE 
+         Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]   
     END
+
+title is visible 
     wait until element is visible  //div[contains(text(), '${TITLE}')]
 
 user is redirected to the active retro page
@@ -120,8 +221,9 @@ the meeting is not saved
 
 I am on the retrospective template page
     [Arguments]  ${link}
-    open browser  ${link}  firefox
+    open browser  ${link}  firefox  options= add_argument("--headless")
     maximize browser window
+    
 
 I choose date and time
     click element  //input[@id='date']
@@ -141,12 +243,53 @@ I choose date and time
 
 retrospective meeting is created
     Sleep  2s
-    ${meeting_on_1stpage}=  Get Element Count  //div[contains(text(), '${TITLE}')]
-    IF  "${meeting_on_1stpage}" == "0"
+    Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+    IF  "${IsElementVisible}" == "False"
         Click Element  //span[@aria-label="right"]
+        Sleep  2s
+        Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible1}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+        IF  "${IsElementVisible1}" == "False"
+            Click Element  //span[@aria-label="right"]
+            Sleep  2s
+            Wait Until Element Is Visible  //span[@aria-label="right"]
+            ${IsElementVisible2}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+            IF  "${IsElementVisible2}" == "False"
+                Click Element  //span[@aria-label="right"]
+                Sleep  2s
+                Wait Until Element Is Visible  //span[@aria-label="right"]
+                ${IsElementVisible3}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                IF  "${IsElementVisible3}" == "False"
+                    Click Element  //span[@aria-label="right"]
+                    Sleep  2s
+                    Wait Until Element Is Visible  //span[@aria-label="right"]
+                    ${IsElementVisible4}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                        IF  "${IsElementVisible4}" == "False"
+                        Click Element  //span[@aria-label="right"]
+                            Sleep  2s
+                            Wait Until Element Is Visible  //span[@aria-label="right"]
+                            ${IsElementVisible5}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                            IF  "${IsElementVisible5}" == "False"
+                            Click Element  //span[@aria-label="right"]
+                            ELSE
+                                Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]  
+                            END
+                        ELSE
+                         Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]  
+                        END
+                ELSE
+                     Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]  
+                END
+            ELSE 
+             Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]   
+            END
+        ELSE  
+             Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]   
+        END
+    ELSE 
+         Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]   
     END
-    wait until element is visible  //div[contains(text(), '${TITLE}')]
-
 
 I drag <templates> in droppable area
      [Arguments]  ${template1}  ${template2}  ${template3}  ${template4} 
@@ -204,12 +347,19 @@ I drag <templates> in droppable area
         Sleep  1s 
     END
 
+a retro template is created
+    the user clicks [Create Template] button
+    I type <title> in the retro template name field
+    the user ticks on the notes checkbox
+    I drag and drop all templates
+    I select Timer duration hours and minutes  02  45
+    I click the [Create] button
 
 a retrospective meeting with notes is created   
-    I access retrospective page
+    I access retrospective page    AutomationDL - manager1@amdaris.com
     the user clicks [Create Retro] button
     the Retro meeting form is displayed
-    I type <title> in the retro template name field
+    I type <title> in the retro meeting name field
     the user ticks on the notes checkbox
     I drag and drop all templates
     I select Timer duration hours and minutes  02  45
@@ -223,10 +373,10 @@ the user ticks anonymous checkbox
 
 an anonymous retro meeting with <templates> is created
     [Arguments]  ${template1}  ${template2}  ${template3}  ${template4}  ${year}  ${month}  ${date}
-    And I access retrospective page
+    And I access retrospective page    AutomationDL - manager1@amdaris.com
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks anonymous checkbox
     And the user ticks on the notes checkbox
     And I drag <templates> in droppable area  ${template1}  ${template2}  ${template3}  ${template4} 
@@ -239,25 +389,24 @@ an anonymous retro meeting with <templates> is created
 
 a retro meeting with <templates> is created
     [Arguments]  ${template1}  ${template2}  ${template3}  ${template4}  ${year}  ${month}  ${date}
-    And I access retrospective page
+    And I access retrospective page    AutomationDL - manager1@amdaris.com
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks on the notes checkbox
     And I drag <templates> in droppable area  ${template1}  ${template2}  ${template3}  ${template4} 
     And I select Timer duration hours and minutes  02  45
     And the user selects date   ${year}  ${month}  ${date}
     And the user selects a later time than the current time
     And I click the [Create] button
-    Then the Retro meeting is saved in the active tab
-    And user is redirected to the active retro page
+    Then user is redirected to the active retro page
 
 a current retro meeting with <templates> is created
     [Arguments]  ${template1}  ${template2}  ${template3}  ${template4} 
-    And I access retrospective page
+    And I access retrospective page    AutomationDL - manager1@amdaris.com
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks on the notes checkbox
     And I drag <templates> in droppable area  ${template1}  ${template2}  ${template3}  ${template4} 
     And I select Timer duration hours and minutes  02  45

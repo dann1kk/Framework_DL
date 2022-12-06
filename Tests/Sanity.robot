@@ -1,5 +1,5 @@
 *** Settings ***
-Library  SeleniumLibrary  timeout= 10s
+Library  SeleniumLibrary  timeout= 15s  
 Resource  ../Resources/Resource.robot
 Resource  ../POM/Retrospective/ActivePage.robot
 Resource  ../POM/Retrospective/PastPage.robot
@@ -18,31 +18,31 @@ Test Setup  Open DL in Firefox
 Test Teardown  End Test
 
 *** Variables ***
-# link to a templates page with templates created on it
-${templates_page}  https://app-toolkit-frontend-qa.azurewebsites.net/project/7/retro?tab=templates
 #give today date
 ${year}  2022
 ${month}  Dec
-${day}   1
+${day}   6
 #set as today
 ${occurence}   Tuesday
+#staff project id, same you access with manager
+${project_id}  483
+${project_name}  AutomationDL - manager1@amdaris.com
 *** Test Cases ***
 Test Case - Display active retros in Active tab
     Given I am logged in as Manager
-    When I access retrospective page
+    When I access retrospective page  ${project_name}
     Then retrospective page is displayed
     And active tab is opened
- 
 
 Test Case - Display saved retros in Past tab
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page  ${project_name}
     When I click on Past button
     Then saved retrospectives are displayed in past tab
 
 Test Case - Check if all templates can be dragged and dropped in the droppable area
    Given I am logged in as Manager
-   And I access retrospective page
+   And I access retrospective page    ${project_name}
    When I open create <retro> form
    And I drag and drop all templates
    Then templates are present in the droppable area
@@ -58,10 +58,10 @@ Test Case - Adding Blank Messages in the Daily Stand-Up Notes
 
 Test Case - Verify if manager can create and save a retro meeting with all templates
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page    ${project_name}
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks on the notes checkbox
     And I drag and drop all templates
     And I select Timer duration hours and minutes  02  45
@@ -73,7 +73,7 @@ Test Case - Verify if manager can create and save a retro meeting with all templ
 
 Test Case - Verify if can save a meeting without adding any templates in the droppable area
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page   ${project_name}
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
     And the user left the droppable area empty
@@ -83,18 +83,19 @@ Test Case - Verify if can save a meeting without adding any templates in the dro
     And the meeting is not saved
 
 Test Case - Verify if user can create retrospective from template
-    [Setup] 
-    Given I am on the retrospective template page  ${templates_page}
-    And I am logged in as Manager
+    Given I am logged in as Manager
+    And I access retrospective page  ${project_name}
+    And I open templates page
+    And a retro template is created
     When I press the Use Template button
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And I choose date and time
     And I click the [Create] button
     Then retrospective meeting is created
 
 Test Case - User is logged out after pressing log out button
     Given I am logged in as Manager
-    When I press log out button on the left side panel
+    When I press log out button on the left side panel  ${project_name}
     Then I am logged out and redirected to the main login page
 
 Test Case - Reveal button Functionality
@@ -117,7 +118,7 @@ Test Case - Hide button Functionality
 
 Test Case - Check the meeting to be active 
     Given I am logged in as Manager 
-    And I am on Daily Stand-Up page 
+    And I am on Daily Stand-Up page     ${project_name}
     And I press Create Daily-Meeting button
     And I type Daily-Meeting title 
     And the user selects date  ${year}  ${month}  ${day} 
@@ -144,7 +145,7 @@ Test Case - Generate invite link
 
 Test Case - Create One-Time Daily Stand-up meeting
     Given I am logged in as Manager
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page    ${project_name}
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  01  45
@@ -171,7 +172,7 @@ Test Case - Check if users receive notifications when notes window is opened
     Given I am logged in as Manager 
     And a retrospective meeting with notes is created
     And I joined the retrospective meeting
-    And a staff user joined the same active retrospective meeting
+    And a staff user joined the same active retrospective meeting  ${project_id}
     And both users clicked on the notes button 
     When staff sends a few messages in notes  1  2  3  4  5  6 
     Then the messages are displayed in notes section for manager
@@ -181,17 +182,18 @@ Test Case - Check if users receive notifications when notes window is closed
     Given I am logged in as Manager 
     And a retrospective meeting with notes is created
     And I joined the retrospective meeting
-    And a staff user joined the same active retrospective meeting
+    And I started the meeting
+    And a staff user joined the same active retrospective meeting  ${project_id}
     And staff clicked on the notes button
     When staff sends a few messages in notes  1  2  3  4  5  6  
     Then manager receives message notification
 
 Test Case - Create Retrospective with particular templates
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page  ${project_name}
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks on the notes checkbox
     And I drag <templates> in droppable area  EVENT_ENDING  -  AGILE  - 
     And I select Timer duration hours and minutes  02  45
@@ -203,7 +205,7 @@ Test Case - Create Retrospective with particular templates
 
 Test Case - Check if templates can be removed from the droppable area
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page    ${project_name}
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
     And I drag <templates> in droppable area  EVENT_ENDING  -  AGILE  - 
@@ -219,7 +221,6 @@ Test Case - Verify if user is required to add event name, time and date.
     Then warning messages are displayed for event name, time and date
     And the meeting is not created
 
-
 Test Case - Edit multiple criteria with valid data on TEAM_HEALTH_CHECK
     Given I am logged in as Manager
     And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  ${year}  ${month}  ${day}
@@ -231,7 +232,8 @@ Test Case - Team Members are added to the Spinning Wheel upon joining daily
     Given I am logged in as Manager
     And a daily stand-up meeting is created for today
     And I joined the Daily meeting
-    When teams members also joined the meeting
+    # give project ID corresponding to one manager accessed, by default they both access first project with id:1
+    When teams members also joined the meeting   ${project_id}
     Then teams members are added and displayed on the spinning wheel
     And manager is not displayed on the spinning wheel
 
@@ -239,7 +241,8 @@ Test Case - Team Members are removed from the Spinning Wheel upon leaving daily
     Given I am logged in as Manager
     And a daily stand-up meeting is created for today
     And I joined the Daily meeting
-    And teams members also joined the meeting
+    # give project ID corresponding to one manager accessed, by default they both access first project with id:1
+    And teams members also joined the meeting   ${project_id}
     When teams members leave the meeting 
     Then team members are removed from the spinning wheel 
 
@@ -247,14 +250,14 @@ Test Case - Writing and sending messages in an active Daily Stand-Up Notes
     Given I am logged in as Manager
     And a daily stand-up meeting is created for today
     And I joined the Daily meeting
-    And teams members also joined the meeting
+    And teams members also joined the meeting  ${project_id}
     When I write a message in notes  My message
     And @user tries to send the message
     Then the message is sent and displayed in Notes for all users 
 
 Test Case - Check side nav bar redirection
     Given I am logged in as Manager
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page    ${project_name}
     And side navigation bar is visible
     When I click navigation bar <button>  Retro
     Then the button redirects me to <page>  Retrospective 
@@ -302,7 +305,7 @@ Test Case - Retro Chat notes not closed upon switching template
     Given I am logged in as manager
     And a retrospective meeting with notes is created
     And I joined the retrospective meeting
-    And a staff user joined the same active retrospective meeting
+    And a staff user joined the same active retrospective meeting  ${project_id}
     When I started the meeting
     And both users clicked on the notes button 
     And I moved to the next template 
@@ -341,7 +344,7 @@ Test Case - Voting results are updated in real-life
     Given I am logged in as Manager
     And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  ${year}  ${month}  ${day}
     And I joined the retrospective meeting
-    And a staff user joined the same active retrospective meeting
+    And a staff user joined the same active retrospective meeting  ${project_id}
     And I started the meeting
     When staff submits <state1> and <state2> in TEAM_HEALTH_CHECK  Normal  Constant
     And I submit my <state1> and <state2> in TEAM_HEALTH_CHECK   Normal   Constant
@@ -377,7 +380,7 @@ Test Case - Participants name are saved anonymously in past retro when anonymous
     Given I am logged in as Manager
     And an anonymous retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  ${year}  ${month}  ${day}
     And I joined the retrospective meeting
-    And a staff user joined the same active retrospective meeting
+    And a staff user joined the same active retrospective meeting  ${project_id}
     And I started the meeting
     When staff submits <state1> and <state2> in TEAM_HEALTH_CHECK  Normal  Constant
     And I submit my <state1> and <state2> in TEAM_HEALTH_CHECK   Normal   Constant
@@ -390,7 +393,7 @@ Test Case - Check past Retrospective notes
     Given I am logged in as Manager
     And a current retro meeting with <templates> is created  ICE_BREAKING  -   -   - 
     And I joined the retrospective meeting
-    And a staff user joined the same active retrospective meeting
+    And a staff user joined the same active retrospective meeting  ${project_id}
     And I started the meeting 
     And staff clicked on the notes button 
     And staff sends a few messages in notes  1  2  3  4  5  6  
@@ -547,7 +550,7 @@ Test Case - Edit time NOW| One time Daily starting in Future
 
 Test Case - Create Stand-Up TIME| Today and Now
     Given I am logged in as Manager
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page    ${project_name}
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  02  45
@@ -559,7 +562,7 @@ Test Case - Create Stand-Up TIME| Today and Now
 
 Test Case - Create Stand-Up TIME| Select past time before current date
     Given I am logged in as Manager
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page    ${project_name}
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  02  45
@@ -569,7 +572,7 @@ Test Case - Create Stand-Up TIME| Select past time before current date
 
 Test Case - Create Stand-Up TIME| Today and future time
     Given I am logged in as Manager
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page    ${project_name}
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  02  45
@@ -581,7 +584,7 @@ Test Case - Create Stand-Up TIME| Today and future time
 
 Test Case - Create Stand-Up TIME| Future date time options
     Given I am logged in as Manager
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page    ${project_name}
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  02  45
@@ -592,7 +595,7 @@ Test Case - Create Stand-Up TIME| Future date time options
 
 Test Case - Create Stand-Up TIME| Future date and any time
     Given I am logged in as Manager
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page    ${project_name}
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  02  45
@@ -604,10 +607,10 @@ Test Case - Create Stand-Up TIME| Future date and any time
 
 Test Case - Create Retro Meeting TIME| Today and Now
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page    ${project_name}
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks on the notes checkbox
     And I drag and drop all templates
     And I select Timer duration hours and minutes  02  45
@@ -619,10 +622,10 @@ Test Case - Create Retro Meeting TIME| Today and Now
 
 Test Case - Create Retro Meeting TIME| Select past time before current date
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page    ${project_name}
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks on the notes checkbox
     And I drag and drop all templates
     And I select Timer duration hours and minutes  02  45
@@ -632,10 +635,10 @@ Test Case - Create Retro Meeting TIME| Select past time before current date
 
 Test Case - Create Retro Meeting TIME| Today and future time
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page    ${project_name}
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks on the notes checkbox
     And I drag and drop all templates
     And I select Timer duration hours and minutes  02  45
@@ -647,10 +650,10 @@ Test Case - Create Retro Meeting TIME| Today and future time
 
 Test Case - Create Retro Meeting TIME| Future date time options
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page    ${project_name}
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks on the notes checkbox
     And I drag and drop all templates
     And I select Timer duration hours and minutes  02  45
@@ -661,10 +664,10 @@ Test Case - Create Retro Meeting TIME| Future date time options
 
 Test Case - Create Retro Meeting TIME| Future date and any time
     Given I am logged in as Manager
-    And I access retrospective page
+    And I access retrospective page    ${project_name}
     When the user clicks [Create Retro] button
     And the Retro meeting form is displayed
-    And I type <title> in the retro template name field
+    And I type <title> in the retro meeting name field
     And the user ticks on the notes checkbox
     And I drag and drop all templates
     And I select Timer duration hours and minutes  02  45
@@ -677,7 +680,7 @@ Test Case - Voting average for default criteria
     Given I am logged in as Manager
     And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -   -   -  ${year}  ${month}  ${day}
     And I joined the retrospective meeting
-    And a staff user joined the same active retrospective meeting
+    And a staff user joined the same active retrospective meeting  ${project_id}
     And I started the meeting
     When staff submits <state1> and <state2> in TEAM_HEALTH_CHECK  Bad  Constant
     Then only manager user sees an Average score for each criteria
@@ -688,7 +691,7 @@ Test Case - Reveal Results after closing the window
     Given I am logged in as Manager
     And a retro meeting with <templates> is created  TEAM_HEALTH_CHECK  -  -  -  ${year}  ${month}  ${day}
     And I joined the retrospective meeting
-    And a staff user joined the same active retrospective meeting
+    And a staff user joined the same active retrospective meeting  ${project_id}
     And I started the meeting
     When staff submits <state1> and <state2> on first page in TEAM_HEALTH_CHECK voting modal  Bad  Constant 
     And staff closes the voting modal

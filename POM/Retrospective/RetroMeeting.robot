@@ -19,11 +19,6 @@ ${state1}
 ${state2}
 
 *** Keywords ***
-
-I am on TEAM_HEALTH_CHECK 
-    [Arguments]   ${link_meeting}
-    Open Browser  ${link_meeting}  firefox
-    Maximize Browser Window
      
 manager clicks reveal results button
     Switch Browser  1
@@ -42,7 +37,7 @@ hide results button is replaced with reveal results button
 
 guest users don't see the voting results
     [Arguments]  ${invite_link}
-    Open Browser  ${invite_link}  firefox 
+    Open Browser  ${invite_link}  firefox  options= add_argument("--headless")
     Maximize Browser Window
     Guest user inserts his name
     Wait Until Element Is Visible  //td[contains(text(), 'You')]
@@ -62,11 +57,11 @@ I started the meeting
 
 both users clicked on the notes button 
     Switch Browser  1 
-    Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
-    Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
+    Wait Until Element Is Visible  //figure
+    Click Element  //figure
     Switch Browser  2
-    Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
-    Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
+    Wait Until Element Is Visible  //figure
+    Click Element  //figure
 
 staff sends a few messages in notes
 
@@ -82,28 +77,28 @@ staff sends a few messages in notes
     Sleep  1s
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  ${message1}
-
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Sleep  1s
+    Click Element  //button[@type="submit"]
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  ${message2}
     Sleep  1s
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //button[@type="submit"]
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  ${message3}
     Sleep  1s
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //button[@type="submit"]
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  ${message4}
     Sleep  1s
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //button[@type="submit"]
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  ${message5}
     Sleep  1s
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //button[@type="submit"]
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  ${message6}
     Sleep  1s
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //button[@type="submit"]
 
 the messages are displayed in notes section for manager
     Switch Browser  1
@@ -120,8 +115,8 @@ staff clicked on the notes button
 
 I clicked on the notes button
     Switch Browser  1
-    Wait Until Element Is Visible  //figure[@class="windows-chat_icon__Z4aj6"]
-    Click Element  //figure[@class="windows-chat_icon__Z4aj6"]
+    Wait Until Element Is Visible  //span[@aria-label="wechat"]
+    Click Element   //span[@aria-label="wechat"]
 
 manager receives message notification
     Switch Browser  1
@@ -141,15 +136,19 @@ I edit multiple criteria
     Click Element  (//span[@aria-label="edit"])[1] 
     Input Text  (//input[@type="text"])[1]  ${criteria1}
     Click Element  //span[@aria-label="check"]
+    Sleep  1s
     Click Element  (//span[@aria-label="edit"])[2] 
     Input Text  (//input[@type="text"])[1]  ${criteria2}
     Click Element  //span[@aria-label="check"]
+    Sleep  1s
     Click Element  (//span[@aria-label="edit"])[3]
     Input Text  (//input[@type="text"])[1]  ${criteria3}
     Click Element  //span[@aria-label="check"]
+    Sleep  1s
     Click Element  (//span[@aria-label="edit"])[4] 
     Input Text  (//input[@type="text"])[1]  ${criteria4}
     Click Element  //span[@aria-label="check"]
+    Sleep  1s
     Click Element  (//span[@aria-label="edit"])[5] 
     Input Text  (//input[@type="text"])[1]  ${criteria5}
     Click Element  //span[@aria-label="check"]
@@ -176,7 +175,7 @@ I click <Element>
     IF  "${Element}" == "x"
     Click Element  //span[@class='ant-modal-close-x']
     ELSE IF  "${Element}" == "Cancel"
-    Click Element  (//button[@class="ant-btn ant-btn-default"])[2]
+    Click Element  //span[contains(text(), 'Cancel')]
     ELSE IF  "${Element}" == "Outside"
     Click Element  //div[@class="ant-modal-wrap"]  
     END
@@ -198,11 +197,13 @@ all participants can write messages in the Notes
     Wait Until Element Is Visible  //input[@id="message"]
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  blabla
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Sleep  1s
+    Click Element  //button[@type="submit"]
     Switch Browser  2
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  blabla
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Sleep  1s
+    Click Element  //button[@type="submit"]
 
 I confirm that I want to end meeting
     Click Element  //span[contains(text(), 'OK')]
@@ -210,10 +211,25 @@ I confirm that I want to end meeting
 I moved to the last template
     Wait Until Element Is Visible  //span[contains(text(),'Next')]
     Click Element  //span[contains(text(),'Next')]
+    Sleep  1s
+    ${confirm_popup}=  Get Element Count    //span[@aria-label="close"]
+    IF  "${confirm_popup}" == "1"
+        Click Element  //span[@aria-label="close"]
+    END 
     Wait Until Element Is Visible  //span[contains(text(),'Next')]
     Click Element  //span[contains(text(),'Next')]
+    Sleep  1s
+    ${confirm_popup1}=  Get Element Count    //span[@aria-label="close"]
+    IF  "${confirm_popup1}" == "1"
+        Click Element  //span[@aria-label="close"]
+    END 
      Wait Until Element Is Visible  //span[contains(text(),'Next')]
     Click Element  //span[contains(text(),'Next')]
+    Sleep  1s
+    ${confirm_popup}=  Get Element Count    //span[@aria-label="close"]
+    IF  "${confirm_popup}" == "1"
+        Click Element  //span[@aria-label="close"]
+    END 
     
 I fill data on all templates
     I vote <state> on template  1
@@ -222,7 +238,7 @@ I fill data on all templates
     I submit my <state1> and <state2> in TEAM_HEALTH_CHECK   Normal   Constant
     I moved to the next template
     I vote <state> on template  2
-    I click End
+    
 
 I vote <state> on template
     [Arguments]  ${state}
@@ -427,10 +443,10 @@ I send a few messages
     Sleep  1s
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  ${message7}
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //button[@type="submit"]
     Click Element  //input[@id="message"]  
     Input Text  //input[@id="message"]  ${message8}
-    Click Element  //*[@id="root"]/section/section/main/div[3]/div/form/div/div/div/div/span/span/button/span
+    Click Element  //button[@type="submit"]
     Sleep  1s
 
 my vote is canceled 

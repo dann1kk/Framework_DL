@@ -5,7 +5,8 @@ Resource  ../POM/Log_In/LoggingIn.robot
 Resource  ../POM/Retrospective/CreateRetro.robot
 *** Keywords ***
 I access retrospective page
-    I press on project  22
+    [Arguments]  ${project_name}
+    I press on project  ${project_name}
     wait until element is visible  //*[@id="root"]/section/aside/div/ul[1]/li[2]
     click element  //*[@id="root"]/section/aside/div/ul[1]/li[2]
     Sleep  2s
@@ -14,8 +15,13 @@ I access retrospective page
        Click Element  //span[@aria-label="close"]
     END
 
+I open templates page    
+    Wait Until Element Is Visible    //div[contains(text(), 'Templates')]
+    Click Element    //div[contains(text(), 'Templates')]
+
 a staff user joined the same active retrospective meeting
-    Open Browser   https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/retro  Firefox  options= add_argument("--private")
+    [Arguments]  ${id_project}
+    Open Browser   https://app-toolkit-frontend-qa.azurewebsites.net/project/${id_project}/retro  Firefox  options= add_argument("--headless") 
     Maximize Browser Window
     I am logged in as Staff
     I joined the retrospective meeting
@@ -32,6 +38,10 @@ I open create <retro> form
     wait until page contains element  //span[contains(text(), 'Create Retro')]
     click element  //span[contains(text(), 'Create Retro')]
 
+the user clicks [Create Template] button
+    wait until element is visible  //span[contains(text(), 'Create Template')]
+    click element  //span[contains(text(), 'Create Template')]
+
 the user clicks [Create Retro] button
     wait until element is visible  //span[contains(text(), 'Create Retro')]
     click element  //span[contains(text(), 'Create Retro')]
@@ -39,9 +49,9 @@ the user clicks [Create Retro] button
 the user is in Active tab on <Page> 
     [Arguments]  ${Page} 
     IF  "${Page}" == "Retro"
-    I access retrospective page
+    I access retrospective page  AutomationDL - manager1@amdaris.com
     ELSE IF  "${Page}" == "Daily"
-    I press on project  21
+    I press on project  AutomationDL - manager1@amdaris.com
     END
     Sleep  1s
      ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]

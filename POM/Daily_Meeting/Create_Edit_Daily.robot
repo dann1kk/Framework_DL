@@ -29,7 +29,7 @@ I select Occurrence one-time
 
 a daily stand-up meeting without occurence is created 
     [Arguments]  ${year}  ${month}  ${day}
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page  AutomationDL - manager1@amdaris.com
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  01  45
@@ -44,7 +44,7 @@ a daily stand-up meeting without occurence is created
 
 a future daily stand-up meeting without occurence is created 
     [Arguments]  ${year}  ${month}  ${day}
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page    AutomationDL - manager1@amdaris.com
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  01  45
@@ -58,7 +58,7 @@ a future daily stand-up meeting without occurence is created
     END
     
 a daily stand-up meeting is created 
-    I am on Daily Stand-Up page
+    I am on Daily Stand-Up page    AutomationDL - manager1@amdaris.com
     I press Create Daily-Meeting button 
     I type Daily-Meeting title
     I select Timer duration hours and minutes  01  15
@@ -79,7 +79,7 @@ minute options are displayed only for the minutes left of this hour
     Wait Until Element Is Visible  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell ant-picker-time-panel-cell-selected"][1]
 
 a daily stand-up meeting is created for today
-    I am on Daily Stand-Up page
+    I am on Daily Stand-Up page    AutomationDL - manager1@amdaris.com
     I press Create Daily-Meeting button 
     I type Daily-Meeting title
     I select Timer duration hours and minutes  01  15
@@ -93,7 +93,7 @@ I click [Edit] button
 I edit the event name
      Wait Until Element Is Visible  //input[@placeholder="Event name"]
     ${TITLE2}=  Generate Random String  20  [LETTERS][NUMBERS]
-    Set Global Variable  ${TITLE2}
+    Set Suite Variable  ${TITLE2}
     Input Text  //input[@placeholder="Event name"]   ${TITLE2}
 
 I untick the Notes and Timer checkboxes
@@ -129,11 +129,59 @@ I click [Update]
     Click Element  //button[.='Update']
 
 the updated meeting is present 
-    Wait Until Element Is Visible   //div[contains(text(), '${TITLE2}')]
+    Sleep  2s
+    Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE2}')]
+    IF  "${IsElementVisible}" == "False"
+        Click Element  //span[@aria-label="right"]
+        Sleep  2s
+        Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible1}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE2}')]
+        IF  "${IsElementVisible1}" == "False"
+            Click Element  //span[@aria-label="right"]
+            Sleep  2s
+            Wait Until Element Is Visible  //span[@aria-label="right"]
+            ${IsElementVisible2}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE2}')]
+            IF  "${IsElementVisible2}" == "False"
+                Click Element  //span[@aria-label="right"]
+                Sleep  2s
+                Wait Until Element Is Visible  //span[@aria-label="right"]
+                ${IsElementVisible3}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE2}')]
+                IF  "${IsElementVisible3}" == "False"
+                    Click Element  //span[@aria-label="right"]
+                    Sleep  2s
+                    Wait Until Element Is Visible  //span[@aria-label="right"]
+                    ${IsElementVisible4}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE2}')]
+                        IF  "${IsElementVisible4}" == "False"
+                        Click Element  //span[@aria-label="right"]
+                            Sleep  2s
+                            Wait Until Element Is Visible  //span[@aria-label="right"]
+                            ${IsElementVisible5}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE2}')]
+                            IF  "${IsElementVisible5}" == "False"
+                            Click Element  //span[@aria-label="right"]
+                            ELSE
+                                Wait Until Element Is Visible  //div[contains(text(), '${TITLE2}')]  
+                            END
+                        ELSE
+                         Wait Until Element Is Visible  //div[contains(text(), '${TITLE2}')]  
+                        END
+                ELSE
+                     Wait Until Element Is Visible  //div[contains(text(), '${TITLE2}')]  
+                END
+            ELSE 
+             Wait Until Element Is Visible  //div[contains(text(), '${TITLE2}')]   
+            END
+        ELSE  
+             Wait Until Element Is Visible  //div[contains(text(), '${TITLE2}')]   
+        END
+    ELSE 
+         Wait Until Element Is Visible  //div[contains(text(), '${TITLE2}')]   
+    END
+
 
 a standup meeting with Notes is created 
     [Arguments]  ${year}  ${month}  ${day}  ${occurence}
-    And I am on Daily Stand-Up page
+    And I am on Daily Stand-Up page    AutomationDL - manager1@amdaris.com
     When I press Create Daily-Meeting button 
     And I type Daily-Meeting title
     And I select Timer duration hours and minutes  01  45
@@ -153,10 +201,10 @@ I click on [Time] field
     click element  //input[@id='time'] 
 
 all hour options are displayed and clickable
-    Click element  (//ul[@class="ant-picker-time-panel-column"])[1]//li[@class="ant-picker-time-panel-cell"][3]
+    Click element  (//ul[@class="ant-picker-time-panel-column"])[1]//li[@class="ant-picker-time-panel-cell"][1]
 
 all minute options are displayed and clickable
-    Click element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][5]
+    Click element  (//ul[@class="ant-picker-time-panel-column"])[2]//li[@class="ant-picker-time-panel-cell"][2]
 
 I remove occurence
     Wait Until Element Is Visible  //span[@class="ant-select-selection-item-remove"]

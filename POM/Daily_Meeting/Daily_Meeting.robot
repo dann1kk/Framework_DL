@@ -20,17 +20,16 @@ DL joined the daily stand-up meeting as <User>
        I am logged in as Staff
     END
 
-
 the standup meeting has Notes integrated
     wait until page contains element  //h3[contains(text(), 'Notes')]
 
 @user writes a blank message in the Notes
-    Wait Until Element Is Visible  //input[@class="ant-input"]
-    input text   //input[@class="ant-input"]    ${SPACE}
+    Wait Until Element Is Visible  //input[@type="text"]
+    input text   //input[@type="text"]    ${SPACE}
 
 @user writes a message in the Notes
-    Wait Until Element Is Visible  //input[@class="ant-input"]
-    input text   //input[@class="ant-input"]    Howdy
+    Wait Until Element Is Visible  //input[@type="text"]
+    input text   //input[@type="text"]    Howdy
 
 @user tries to send the message
     click element  //span[@aria-label='send']
@@ -42,14 +41,15 @@ the message is not sent and displayed in Notes
     wait until page does not contain element  //*[@id="messageList"]/ul/li[1]/div
 
 teams members also joined the meeting
-    Open Browser  https://app-toolkit-frontend-qa.azurewebsites.net/project/1648/daily  Chrome
+    [Arguments]  ${id_project}
+    Open Browser  https://app-toolkit-frontend-qa.azurewebsites.net/project/${id_project}/daily  Chrome  options= add_argument("--headless")
     Maximize Browser Window 
     I am logged in as Staff
     I joined the Daily meeting 
     
 
 teams members are added and displayed on the spinning wheel
-    Wait Until Element Is Visible  //div[contains(text(), 'staff')]
+    Wait Until Element Is Visible  //div[contains(text(), '')]
 
 manager is not displayed on the spinning wheel
     Wait Until Element Is Not Visible  //div[contains(text(), 'Manager')]
@@ -64,8 +64,8 @@ team members are removed from the spinning wheel
 I write a message in notes
     [Arguments]   ${message}
     Switch Browser  1
-    Wait Until Element Is Visible  //input[@class="ant-input"]
-    input text   //input[@class="ant-input"]    ${message}
+    Wait Until Element Is Visible  //input[@type="text"]
+    input text   //input[@type="text"]    ${message}
     Sleep  1s
 
 the message is sent and displayed in Notes for all users 
@@ -75,11 +75,11 @@ the message is sent and displayed in Notes for all users
 
 I write a few messages in notes
     [Arguments]   ${message1}  ${message2}
-    Wait Until Element Is Visible  //input[@class="ant-input"]
-    input text   //input[@class="ant-input"]    ${message1}
+    Wait Until Element Is Visible  //input[@type="text"]
+    input text   //input[@type="text"]    ${message1}
     click element  //span[@aria-label='send']
-    Wait Until Element Is Visible  //input[@class="ant-input"]
-    input text   //input[@class="ant-input"]    ${message2}
+    Wait Until Element Is Visible  //input[@type="text"]
+    input text   //input[@type="text"]    ${message2}
     click element  //span[@aria-label='send']
     Sleep  1s
 
@@ -92,6 +92,11 @@ save notes checkbox is ticked
     Click Element  //span[contains(text(), 'OK')]
 
 the meeting notes are saved in Past tab
+    Sleep  2s
+    ${popup_visible}=  Get Element Count  //div[@class="feedback-modal_container__ly2We"]
+    IF  "${popup_visible}" == "1"
+       Click Element  //span[@class='ant-modal-close-x']
+    END
     Click Element  //div[contains(text(), 'Past')]
     Wait Until Element Is Visible  (//span[contains(text(), 'View')])[2]
     Click Element  (//span[contains(text(), 'View')])[2]

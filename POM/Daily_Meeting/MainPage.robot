@@ -9,7 +9,8 @@ ${TITLE}
 *** Keywords ***
 
 I am on Daily Stand-Up page
-   I press on project  21
+    [Arguments]  ${project_name}
+   I press on project  ${project_name}
    Wait Until Element Is Visible  //h1[contains(text(), 'Daily Stand-Up')] 
    Sleep  2s
     ${popup_visible}=  Get Element Count  //div[@class="feedback-modal_container__ly2We"]
@@ -18,8 +19,15 @@ I am on Daily Stand-Up page
     END
     
 I press log out button on the left side panel
-    I press on project  1
-    Wait Until Element Is Visible  //h1[contains(text(), 'Daily Stand-Up')] 
+    [Arguments]  ${project_name}
+    I press on project  ${project_name}
+    Wait Until Element Is Visible  //h1[contains(text(), 'Daily Stand-Up')]
+    Sleep  2s
+     ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
+    IF  "${popup_visible}" == "1"
+       Click Element  //span[@aria-label="close"]
+       Sleep  2s
+    END
     I click on logout button
 
 I joined the Daily meeting 
@@ -27,6 +35,7 @@ I joined the Daily meeting
      ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
     IF  "${popup_visible}" == "1"
        Click Element  //span[@aria-label="close"]
+       Sleep  2s
     END
     Wait Until Element Is Visible  (//span[contains(text(), 'Join')])[2]
     Click Element  (//span[contains(text(), 'Join')])[2]
@@ -34,14 +43,19 @@ I joined the Daily meeting
 I click on logout button  
     Sleep  1s
     Execute Javascript  window.scrollTo(812, 950)
-    #Wait Until Element Is Visible  //span[contains(text(), 'Log out')]
-    Click Element  //span[contains(text(), 'Log out')]
+    #Wait Until Element Is Visible   //li[@data-menu-id="rc-menu-uuid-26489-2-logout"]
+    Click Element  (//li[@role="menuitem"])[7]
     
 I am logged out and redirected to the main login page
      Wait Until Element Is Visible  id=basic_email
 
 
 I press Create Daily-Meeting button
+    Sleep  2s
+    ${popup_visible}=  Get Element Count  //div[@class="feedback-modal_container__ly2We"]
+    IF  "${popup_visible}" == "1"
+       Click Element  //span[@class='ant-modal-close-x']
+    END
     Wait Until Element Is Visible  //span[contains(text(), 'Create Daily-Meeting')]
     Click Element  //span[contains(text(), 'Create Daily-Meeting')]
     
@@ -60,11 +74,56 @@ I get redirected to the main page
     Wait Until Element Is Visible  //h1[contains(text(), 'Daily Stand-Up')]
 
 the created meeting is present 
-    Sleep  1s
-    ${meeting_on_1stpage}=  Get Element Count  //div[contains(text(), '${TITLE}')]
-    IF  "${meeting_on_1stpage}" == "0"
+    Sleep  2s
+    Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+    IF  "${IsElementVisible}" == "False"
         Click Element  //span[@aria-label="right"]
+        Sleep  2s
+        Wait Until Element Is Visible  //span[@aria-label="right"]
+    ${IsElementVisible1}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+        IF  "${IsElementVisible1}" == "False"
+            Click Element  //span[@aria-label="right"]
+            Sleep  2s
+            Wait Until Element Is Visible  //span[@aria-label="right"]
+            ${IsElementVisible2}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+            IF  "${IsElementVisible2}" == "False"
+                Click Element  //span[@aria-label="right"]
+                Sleep  2s
+                Wait Until Element Is Visible  //span[@aria-label="right"]
+                ${IsElementVisible3}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                IF  "${IsElementVisible3}" == "False"
+                    Click Element  //span[@aria-label="right"]
+                    Sleep  2s
+                    Wait Until Element Is Visible  //span[@aria-label="right"]
+                    ${IsElementVisible4}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                        IF  "${IsElementVisible4}" == "False"
+                        Click Element  //span[@aria-label="right"]
+                            Sleep  2s
+                            Wait Until Element Is Visible  //span[@aria-label="right"]
+                            ${IsElementVisible5}=  Run Keyword And Return Status    Element Should Be Visible   //div[contains(text(), '${TITLE}')]
+                            IF  "${IsElementVisible5}" == "False"
+                            Click Element  //span[@aria-label="right"]
+                            ELSE
+                                Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]  
+                            END
+                        ELSE
+                         Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]  
+                        END
+                ELSE
+                     Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]  
+                END
+            ELSE 
+             Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]   
+            END
+        ELSE  
+             Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]   
+        END
+    ELSE 
+         Wait Until Element Is Visible  //div[contains(text(), '${TITLE}')]   
     END
+
+element is visible 
     Wait Until Element Is Visible   //div[contains(text(), '${TITLE}')]
 
 [Join] button is enabled
@@ -106,6 +165,11 @@ the button redirects me to <page>
     END
 
 I click [Delete] button on Daily meeting
+    Sleep  2s
+    ${popup_visible}=  Get Element Count  //div[@class="ant-modal-content"]
+    IF  "${popup_visible}" == "1"
+       Click Element  //span[@aria-label="close"]
+    END
     Wait Until Element Is Visible  (//span[contains(text(), 'Delete')])[2]
     Click Element  (//span[contains(text(), 'Delete')])[2]
 

@@ -1,22 +1,25 @@
 *** Settings ***
 Resource  ../POM/Log_In/LoggingIn.robot
-
+Resource  ../POM/Retrospective/CreateRetro.robot
 *** Settings ***
 Library  SeleniumLibrary
 Library  String
 
+*** Variables ***
+${TITLE}
 
 *** Keywords ***
 
 I press the Use Template button
     I get redirected to template page
-    wait until element is visible  (//span[contains(text(), 'Use')])[2]
-    click element  (//span[contains(text(), 'Use')])[2]
+    wait until element is visible  (//div[.='${TITLE}']/parent::li//button)[1] 
+    click element  (//div[.='${TITLE}']/parent::li//button)[1] 
 
 
-I get redirected to template page
-    Wait Until Element Is Visible  //div[contains(text(), 'Templates')]
-    click element  //div[contains(text(), 'Templates')]
+I get redirected to template page   
+     Wait Until Element Is Visible  //h1[contains(text(), 'Retrospective')]
+
+
 
 Open and login 2 browsers
     Open Browser  https://app-toolkit-frontend-qa.azurewebsites.net/project  firefox  
